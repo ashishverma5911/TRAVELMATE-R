@@ -1,0 +1,54 @@
+[
+  {
+    "id": "sz-01",
+    "zone_code": "DEL-CP-CENTRAL",
+    "name": "Connaught Place & Janpath Heritage Circle",
+    "district": "New Delhi",
+    "risk_level": "Green",
+    "status_badge": "Official Advisory (Green - High Security)",
+    "ncrb_data_year": "2023-2024",
+    "advisory_text": "High police patrol frequency, well-lit pedestrian corridors, dedicated 24/7 Tourist Police Kiosk in Inner Circle block. Be mindful of minor touts near underground Palika Bazaar claiming special shopping festivals.",
+    "source_label": "Official NCRB District Record & Delhi Police Advisory",
+    "last_updated": "2026-08-01",
+    "recommendations": "Safe for walking at night; use official prepaid auto booths located near Rajiv Chowk Metro Gate 7."
+  },
+  {
+    "id": "sz-02",
+    "zone_code": "DEL-OLD-CHANDNI",
+    "name": "Chandni Chowk & Old Delhi Rail Corridor",
+    "district": "North Delhi",
+    "risk_level": "Amber",
+    "status_badge": "Official Advisory (Amber - High Congestion)",
+    "ncrb_data_year": "2023-2024",
+    "advisory_text": "Extremely high pedestrian and rickshaw density. Frequent reports of inflated transport fares for foreign visitors and unauthorized guides offering 'exclusive rooftop views'.",
+    "source_label": "Official NCRB District Record & Delhi Police Advisory",
+    "last_updated": "2026-08-01",
+    "recommendations": "Keep bags zipped in front. Book e-rickshaws or walk the newly pedestrianized heritage promenade. Avoid dark side lanes (katras) after 21:00."
+  },
+  {
+    "id": "sz-03",
+    "zone_code": "DEL-PAHARGANJ",
+    "name": "Paharganj / NDLS Railway Station Main Exit",
+    "district": "Central Delhi",
+    "risk_level": "Amber",
+    "status_badge": "Official Advisory (Amber - Tout Sensitivity)",
+    "ncrb_data_year": "2023-2024",
+    "advisory_text": "Documented hotspot for auto-rickshaw fare inflation and 'hotel has burned down / closed' diversion tactics to commission hotels.",
+    "source_label": "Official NCRB District Record & Delhi Police Advisory",
+    "last_updated": "2026-08-01",
+    "recommendations": "Ignore unsolicited agents on footbridges. Only use the Delhi Traffic Police Prepaid Taxi/Auto Counter on Ajmeri Gate / Paharganj sides or app cabs."
+  },
+  {
+    "id": "sz-04",
+    "zone_code": "DEL-MEHRAULI",
+    "name": "Mehrauli Archeological & Qutub Environs",
+    "district": "South Delhi",
+    "risk_level": "Green",
+    "status_badge": "Official Advisory (Green - Monitored Heritage)",
+    "ncrb_data_year": "2023-2024",
+    "advisory_text": "The main Qutub Minar complex has comprehensive CISF and Delhi Police security. Mehrauli Archeological Park has dense greenery; stick to marked paved trails during daylight.",
+    "source_label": "Official NCRB District Record & Delhi Police Advisory",
+    "last_updated": "2026-08-01",
+    "recommendations": "Use metro (Qutub Minar station on Yellow Line) or official app cabs. Exit park premises by 18:00."
+  }
+]

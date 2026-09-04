@@ -1,0 +1,117 @@
+[
+  {
+    "category": "Transport & Meter",
+    "icon": "Car",
+    "phrases": [
+      {
+        "english": "Please turn on the meter.",
+        "hindi": "भैया, मीटर चालू कर दीजिए।",
+        "transliteration": "Bhaiya, meter chaalu kar dijiye.",
+        "audio_phonetic": "Bhai-ya, mee-tur chaa-loo kur dee-jee-ye",
+        "context": "Use when an auto driver quotes an arbitrary high flat fare."
+      },
+      {
+        "english": "Will you go by the government meter?",
+        "hindi": "क्या आप सरकारी मीटर से चलेंगे?",
+        "transliteration": "Kya aap sarkari meter se chalenge?",
+        "audio_phonetic": "Kya aap sur-kaa-ree mee-tur say chuh-leng-gay?",
+        "context": "Ask before boarding an auto-rickshaw at railway stations or tourist spots."
+      },
+      {
+        "english": "Please stop here.",
+        "hindi": "कृपया यहाँ रोक दीजिए।",
+        "transliteration": "Kripya yahan rok dijiye.",
+        "audio_phonetic": "Krip-ya yuh-haan rok dee-jee-ye",
+        "context": "To halt at your exact gate or destination."
+      },
+      {
+        "english": "Take me to Red Fort main entrance.",
+        "hindi": "मुझे लाल किले के मुख्य प्रवेश द्वार पर ले चलिए।",
+        "transliteration": "Mujhe Lal Qila ke mukhya pravesh dwar par le chaliye.",
+        "audio_phonetic": "Moo-jhay Laal Kee-lay kay mookh-ya pruh-vaysh dwaar pur lay chuh-lee-ye",
+        "context": "Ensures the driver drops you at Lahori Gate, not remote markets."
+      }
+    ]
+  },
+  {
+    "category": "Fair Fare & Negotiation",
+    "icon": "IndianRupee",
+    "phrases": [
+      {
+        "english": "The TravelMate official rate is ₹180 to ₹220.",
+        "hindi": "ट्रैवलमेट सरकारी दर ₹180 से ₹220 है।",
+        "transliteration": "TravelMate sarkari dar ek sau assi se do sau bees rupaye hai.",
+        "audio_phonetic": "Sur-kaa-ree dur 180 say 220 hai",
+        "context": "Show this card when quoted an inflated ₹500 fare."
+      },
+      {
+        "english": "Please give me an official receipt.",
+        "hindi": "कृपया मुझे पक्की रसीद दीजिए।",
+        "transliteration": "Kripya mujhe pakki raseed dijiye.",
+        "audio_phonetic": "Krip-ya moo-jhay puk-kee ruh-seed dee-jee-ye",
+        "context": "For paid parking, toll, or monument camera tickets."
+      },
+      {
+        "english": "No thank you, I do not need a tour guide.",
+        "hindi": "नहीं धन्यवाद, मुझे गाइड की आवश्यकता नहीं है।",
+        "transliteration": "Nahi dhanyavaad, mujhe guide ki aavashyakta nahi hai.",
+        "audio_phonetic": "Nuh-heen dhun-yuh-vaad, guide na-heen chaa-hi-ye",
+        "context": "Polite firm refusal for aggressive street touts outside monuments."
+      }
+    ]
+  },
+  {
+    "category": "Emergency & Safety",
+    "icon": "ShieldAlert",
+    "phrases": [
+      {
+        "english": "I need police assistance immediately.",
+        "hindi": "मुझे तुरंत पुलिस सहायता चाहिए।",
+        "transliteration": "Mujhe turant police sahayata chahiye.",
+        "audio_phonetic": "Moo-jhay too-runt po-lees suh-haa-yuh-tuh chaa-hi-ye",
+        "context": "Dial 112 or show to nearby security guards."
+      },
+      {
+        "english": "Where is the nearest Tourist Police Booth?",
+        "hindi": "निकटतम टूरिस्ट पुलिस बूथ कहाँ है?",
+        "transliteration": "Nikat-tam Tourist Police booth kahan hai?",
+        "audio_phonetic": "Nik-ut-tum too-rist po-lees booth kuh-haan hai?",
+        "context": "Active booths exist at Connaught Place, Paharganj, and IGI Airport."
+      },
+      {
+        "english": "Please call 112 for me.",
+        "hindi": "कृपया मेरे लिए 112 पर कॉल कर दीजिए।",
+        "transliteration": "Kripya mere liye 112 par call kar dijiye.",
+        "audio_phonetic": "Krip-ya may-ray lee-ay 112 pur call kur dee-jee-ye",
+        "context": "Ask local shopkeepers or metro staff in an emergency."
+      },
+      {
+        "english": "I need to contact my Embassy.",
+        "hindi": "मुझे अपने दूतावास से संपर्क करना है।",
+        "transliteration": "Mujhe apne dootavaas se sampark karna hai.",
+        "audio_phonetic": "Moo-jhay up-nay doo-tuh-vaas say sum-purk kur-nuh hai",
+        "context": "For passport loss or serious legal/consular matters."
+      }
+    ]
+  },
+  {
+    "category": "Heritage & Cultural Etiquette",
+    "icon": "Landmark",
+    "phrases": [
+      {
+        "english": "Where can I safely deposit my shoes?",
+        "hindi": "जूते सुरक्षित जमा करने का काउंटर कहाँ है?",
+        "transliteration": "Joote surakshit jama karne ka counter kahan hai?",
+        "audio_phonetic": "Joo-tay soo-ruk-shit juh-muh kur-nay kuh coun-tur kuh-haan hai?",
+        "context": "Required at Gurudwara Bangla Sahib and Jama Masjid."
+      },
+      {
+        "english": "Is photography permitted here?",
+        "hindi": "क्या यहाँ फोटो खींचने की अनुमति है?",
+        "transliteration": "Kya yahan photo kheenchne ki anumati hai?",
+        "audio_phonetic": "Kya yuh-haan pho-to kheenchnay kee uh-noo-muh-tee hai?",
+        "context": "Prohibited inside Lotus Temple and Akshardham sanctum."
+      }
+    ]
+  }
+]

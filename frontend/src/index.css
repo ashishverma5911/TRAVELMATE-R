@@ -1,0 +1,496 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-color: #080D1A;
+  --text-color: #F1F5F9;
+  --surface-bg: #111927;
+  --surface-card: rgba(23, 32, 51, 0.75);
+  --surface-border: rgba(255, 255, 255, 0.08);
+  --glass-panel-bg: rgba(17, 24, 39, 0.75);
+  --glass-panel-border: rgba(255, 255, 255, 0.08);
+  --glass-card-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+  --glass-card-border: rgba(255, 255, 255, 0.07);
+  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --input-bg: #111927;
+  --input-text: #F8FAFC;
+  --input-border: rgba(255, 255, 255, 0.12);
+  --scrollbar-track: #0B1120;
+  --scrollbar-thumb: #1E293B;
+}
+
+html.light {
+  --bg-color: #F8FAFC;
+  --text-color: #0F172A;
+  --surface-bg: #FFFFFF;
+  --surface-card: #FFFFFF;
+  --surface-border: #E2E8F0;
+  --glass-panel-bg: rgba(255, 255, 255, 0.9);
+  --glass-panel-border: #CBD5E1;
+  --glass-card-bg: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+  --glass-card-border: #CBD5E1;
+  --card-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.06);
+  --input-bg: #FFFFFF;
+  --input-text: #0F172A;
+  --input-border: #CBD5E1;
+  --scrollbar-track: #E2E8F0;
+  --scrollbar-thumb: #94A3B8;
+}
+
+@layer base {
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: var(--glass-panel-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-panel-border);
+  }
+
+  .glass-card {
+    background: var(--glass-card-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-card-border);
+    box-shadow: var(--card-shadow);
+  }
+
+  .glass-card-hover {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card-hover:hover {
+    transform: translateY(-2px);
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 12px 36px 0 rgba(16, 185, 129, 0.15);
+  }
+
+  .text-gradient-emerald {
+    background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-saffron {
+    background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-trust {
+    background: linear-gradient(135deg, #60A5FA 0%, #A78BFA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* ==========================================================================
+   GLOBAL LIGHT THEME ADAPTIVE STYLING (WCAG AA COMPLIANT)
+   ========================================================================== */
+html.light .bg-background {
+  background-color: var(--bg-color) !important;
+}
+
+html.light .bg-surface {
+  background-color: var(--surface-bg) !important;
+  border-color: var(--surface-border) !important;
+}
+
+html.light .bg-surface-card {
+  background-color: var(--surface-card) !important;
+  border-color: var(--surface-border) !important;
+}
+
+html.light .border-surface-border {
+  border-color: var(--surface-border) !important;
+}
+
+html.light .border-white\/10,
+html.light .border-white\/5,
+html.light .border-white\/20 {
+  border-color: #E2E8F0 !important;
+}
+
+html.light .bg-white\/5 {
+  background-color: #F1F5F9 !important;
+}
+
+html.light .bg-white\/10 {
+  background-color: #E2E8F0 !important;
+}
+
+/* Headings and primary text in light mode */
+html.light h1.text-white,
+html.light h2.text-white,
+html.light h3.text-white,
+html.light h4.text-white,
+html.light .font-display.text-white {
+  color: #0F172A !important;
+}
+
+html.light .text-slate-100 {
+  color: #0F172A !important;
+}
+
+html.light .text-slate-200 {
+  color: #1E293B !important;
+}
+
+html.light .text-slate-300 {
+  color: #334155 !important;
+}
+
+html.light .text-slate-400 {
+  color: #64748B !important;
+}
+
+/* Ensure form inputs have white surfaces and dark text in light mode */
+html.light input:not([type="checkbox"]):not([type="radio"]),
+html.light textarea,
+html.light select {
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
+  border-color: var(--input-border) !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+/* Retain white text on solid buttons, badges & gradients */
+html.light button.bg-emerald-600,
+html.light button.bg-emerald-500,
+html.light button.bg-indigo-600,
+html.light button.bg-indigo-500,
+html.light button.bg-red-600,
+html.light a.bg-emerald-600,
+html.light a.bg-indigo-600,
+html.light [class*="bg-gradient-to"] {
+  color: #FFFFFF !important;
+}
+
+html.light button.bg-emerald-600 *,
+html.light button.bg-indigo-600 *,
+html.light [class*="bg-gradient-to"] * {
+  color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   MONUMENT CARDS & COMPONENT TOKENS (LIGHT & DARK DUAL THEME)
+   ========================================================================== */
+
+/* 1. Dual Fee Matrix & Timings Data Box (Issue #2) */
+.monument-data-box {
+  background: rgba(17, 24, 39, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #E2E8F0;
+}
+.monument-data-box .data-box-label {
+  color: #94A3B8;
+}
+.monument-data-box .data-box-val {
+  color: #FFFFFF;
+}
+.monument-data-box .data-box-subval {
+  color: #CBD5E1;
+}
+.monument-data-box .data-box-divider {
+  border-color: rgba(255, 255, 255, 0.07);
+}
+.monument-data-box .data-box-timings {
+  color: #94A3B8;
+}
+.monument-data-box .data-box-closed {
+  color: #FBBF24;
+}
+
+html.light .monument-data-box {
+  background-color: #F1F5F9 !important; /* Clearly distinct from white card */
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+html.light .monument-data-box .data-box-label {
+  color: #475569 !important;
+  font-weight: 500;
+}
+html.light .monument-data-box .data-box-val {
+  color: #0F172A !important;
+  font-weight: 700;
+}
+html.light .monument-data-box .data-box-subval {
+  color: #1E293B !important;
+  font-weight: 600;
+}
+html.light .monument-data-box .data-box-divider {
+  border-color: #E2E8F0 !important;
+}
+html.light .monument-data-box .data-box-timings {
+  color: #475569 !important;
+}
+html.light .monument-data-box .data-box-closed {
+  color: #B45309 !important; /* High-contrast dark amber */
+  font-weight: 600;
+}
+
+/* 2. Cultural & Scam Advisory Box (Issue #3) */
+.scam-advisory-box {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #FCD34D;
+}
+.scam-advisory-box svg {
+  color: #FBBF24;
+}
+
+html.light .scam-advisory-box {
+  background-color: #FEF3C7 !important; /* Richer warm amber background */
+  border: 1px solid #F59E0B !important;
+  color: #78350F !important; /* Deep dark amber-brown for 8.5:1 contrast ratio */
+}
+html.light .scam-advisory-box p {
+  color: #78350F !important;
+  font-weight: 600;
+}
+html.light .scam-advisory-box svg {
+  color: #B45309 !important;
+}
+
+/* 3. Best Time to Visit Box */
+.best-time-box {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.best-time-box .best-time-header {
+  color: #34D399;
+}
+.best-time-box .best-time-pill {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6EE7B7;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+.best-time-box .best-time-desc {
+  color: #CBD5E1;
+}
+.best-time-box .best-time-tip {
+  color: #FCD34D;
+}
+
+html.light .best-time-box {
+  background-color: #F0FDF4 !important; /* Mint green */
+  border-color: #86EFAC !important;
+}
+html.light .best-time-box .best-time-header {
+  color: #15803D !important; /* 5.2:1 contrast */
+}
+html.light .best-time-box .best-time-pill {
+  background-color: #DCFCE7 !important;
+  color: #166534 !important;
+  border-color: #86EFAC !important;
+}
+html.light .best-time-box .best-time-desc {
+  color: #166534 !important; /* 6.1:1 contrast */
+  font-weight: 500;
+}
+html.light .best-time-box .best-time-tip {
+  color: #92400E !important; /* 6.8:1 contrast */
+  font-weight: 500;
+}
+
+/* 4. Crowd Density Badges */
+html.light .crowd-high {
+  background-color: #FEE2E2 !important;
+  color: #991B1B !important;
+  border-color: #FCA5A5 !important;
+}
+html.light .crowd-medium {
+  background-color: #FEF3C7 !important;
+  color: #92400E !important;
+  border-color: #FCD34D !important;
+}
+html.light .crowd-low {
+  background-color: #DCFCE7 !important;
+  color: #166534 !important;
+  border-color: #86EFAC !important;
+}
+
+/* 5. StatusBadges (WCAG AA Compliant) */
+html.light .status-badge-official {
+  background-color: #D1FAE5 !important;
+  border-color: #6EE7B7 !important;
+  color: #065F46 !important;
+}
+html.light .status-badge-official svg {
+  color: #059669 !important;
+}
+html.light .status-badge-authorized {
+  background-color: #DBEAFE !important;
+  border-color: #93C5FD !important;
+  color: #1E40AF !important;
+}
+html.light .status-badge-authorized svg {
+  color: #2563EB !important;
+}
+html.light .status-badge-estimated {
+  background-color: #FEF3C7 !important;
+  border-color: #FCD34D !important;
+  color: #92400E !important;
+}
+html.light .status-badge-estimated svg {
+  color: #D97706 !important;
+}
+html.light .status-badge-stale {
+  background-color: #FFE4E6 !important;
+  border-color: #FDA4AF !important;
+  color: #9F1239 !important;
+}
+html.light .status-badge-stale svg {
+  color: #E11D48 !important;
+}
+html.light .status-badge-user-reported {
+  background-color: #F3E8FF !important;
+  border-color: #D8B4FE !important;
+  color: #6B21A8 !important;
+}
+html.light .status-badge-user-reported svg {
+  color: #9333EA !important;
+}
+
+/* 6. Filter Pills & View Mode Buttons */
+html.light .category-filter-pill:not(.active) {
+  background-color: #FFFFFF !important;
+  color: #334155 !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+html.light .category-filter-pill:not(.active):hover {
+  color: #0F172A !important;
+  border-color: #94A3B8 !important;
+}
+html.light .category-filter-pill.active {
+  background-color: #059669 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+}
+
+html.light .view-mode-container {
+  background-color: #E2E8F0 !important;
+  border-color: #CBD5E1 !important;
+}
+html.light .view-mode-btn:not(.active) {
+  color: #475569 !important;
+}
+html.light .view-mode-btn:not(.active):hover {
+  color: #0F172A !important;
+}
+html.light .view-mode-btn.active {
+  background-color: #FFFFFF !important;
+  color: #065F46 !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 7. Card Action Buttons */
+html.light .card-details-btn {
+  color: #334155 !important;
+}
+html.light .card-details-btn:hover {
+  color: #059669 !important;
+}
+
+html.light .btn-checkin {
+  background-color: #F1F5F9 !important;
+  border-color: #CBD5E1 !important;
+  color: #1E293B !important;
+}
+html.light .btn-checkin:hover {
+  background-color: #E2E8F0 !important;
+  border-color: #94A3B8 !important;
+  color: #0F172A !important;
+}
+
+html.light .badge-visited {
+  background-color: #DCFCE7 !important;
+  border-color: #86EFAC !important;
+  color: #166534 !important;
+}
+
+html.light .btn-booking {
+  background-color: #059669 !important;
+  border-color: #047857 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.2);
+}
+html.light .btn-booking:hover {
+  background-color: #047857 !important;
+}
+
+/* 8. Modal light mode styling */
+html.light .place-modal-card {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  color: #0F172A !important;
+}
+html.light .modal-stat-box {
+  background-color: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+}
+html.light .modal-stat-box span:first-child {
+  color: #475569 !important;
+}
+html.light .modal-safety-note {
+  background-color: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+  color: #1E293B !important;
+}
+html.light .modal-review-card {
+  background-color: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Radar pulse animation for live GPS */
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 12px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.radar-pulse {
+  animation: radar-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}

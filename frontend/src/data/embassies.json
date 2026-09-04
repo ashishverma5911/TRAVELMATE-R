@@ -1,0 +1,66 @@
+{
+  "United Kingdom": {
+    "name": "British High Commission, New Delhi",
+    "address": "Shantipath, Chanakyapuri, New Delhi, 110021",
+    "phone": "+91 11 2419 2100",
+    "emergency_phone": "+91 11 2419 2100 (24/7 Consular Assistance)",
+    "email": "web.newdelhi@fcdo.gov.uk",
+    "country_code": "GB"
+  },
+  "United States": {
+    "name": "Embassy of the United States of America",
+    "address": "Shantipath, Chanakyapuri, New Delhi, 110021",
+    "phone": "+91 11 2419 8000",
+    "emergency_phone": "+91 11 2419 8000 (ACS Emergency)",
+    "email": "acsnd@state.gov",
+    "country_code": "US"
+  },
+  "Germany": {
+    "name": "German Embassy New Delhi",
+    "address": "6/50G Shantipath, Chanakyapuri, New Delhi, 110021",
+    "phone": "+91 11 4419 9199",
+    "emergency_phone": "+91 98 1000 4950 (After-hours emergency)",
+    "email": "info@new-delhi.diplo.de",
+    "country_code": "DE"
+  },
+  "France": {
+    "name": "Embassy of France in India",
+    "address": "2/50-E Shantipath, Chanakyapuri, New Delhi, 110021",
+    "phone": "+91 11 4319 6100",
+    "emergency_phone": "+91 99 9997 7338 (Emergency Consular)",
+    "email": "admin-francais.new-delhi-amba@diplomatie.gouv.fr",
+    "country_code": "FR"
+  },
+  "Australia": {
+    "name": "Australian High Commission, New Delhi",
+    "address": "1/50G Shantipath, Chanakyapuri, New Delhi, 110021",
+    "phone": "+91 11 4139 9900",
+    "emergency_phone": "+61 2 6261 3305 (24/7 Consular Emergency)",
+    "email": "ahc.newdelhi@dfat.gov.au",
+    "country_code": "AU"
+  },
+  "Japan": {
+    "name": "Embassy of Japan in India",
+    "address": "50-G Shantipath, Chanakyapuri, New Delhi, 110021",
+    "phone": "+91 11 2687 6581",
+    "emergency_phone": "+91 11 2687 6581",
+    "email": "jpemb-cons@nd.mofa.go.jp",
+    "country_code": "JP"
+  },
+  "Spain": {
+    "name": "Embassy of Spain in New Delhi",
+    "address": "12 Prithviraj Road, New Delhi, 110011",
+    "phone": "+91 11 4129 3000",
+    "emergency_phone": "+91 98 1016 4161 (Emergency Line)",
+    "email": "emb.nuevadelhi@maec.es",
+    "country_code": "ES"
+  },
+  "Canada": {
+    "name": "High Commission of Canada in India",
+    "address": "7/8 Shantipath, Chanakyapuri, New Delhi, 110021",
+    "phone": "+91 11 4178 2000",
+    "emergency_phone": "+1 613 996 8885 (Collect call to Ottawa emergency)",
+    "email": "delhi-consular@international.gc.ca",
+    "country_code": "CA"
+  }
+}

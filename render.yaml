@@ -1,0 +1,56 @@
+services:
+  # ==============================================================================
+  # TravelMate Backend REST API (Express + Supabase / PostgreSQL)
+  # ==============================================================================
+  - type: web
+    name: travelmate-backend
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: CORS_ORIGIN
+        value: "*" # Set to your Vercel URL (e.g. https://travelmate-frontend.vercel.app) or leave *
+      - key: DATABASE_URL
+        sync: false # Supabase Transaction Pooler URI (postgresql://postgres.[ref]:[pass]@aws-0-[region].pooler.supabase.com:6543/postgres?pgbouncer=true)
+      - key: SUPABASE_URL
+        sync: false # https://<project-ref>.supabase.co
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: AI_SERVICE_URL
+        sync: false # Set to your travelmate-ai-service Render URL (e.g. https://travelmate-ai-service.onrender.com)
+      - key: GOOGLE_MAPS_API_KEY
+        sync: false # Optional: Google Maps Platform API Key
+      - key: BHASHINI_USER_ID
+        sync: false # Optional: Digital India Bhashini Language API
+      - key: BHASHINI_API_KEY
+        sync: false
+
+  # ==============================================================================
+  # TravelMate AI Microservice (FastAPI + Claude RAG + OCR)
+  # ==============================================================================
+  - type: web
+    name: travelmate-ai-service
+    env: python
+    plan: free
+    rootDir: ai-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: CORS_ORIGIN
+        value: "*" # Set to your Vercel URL (e.g. https://travelmate-frontend.vercel.app) or leave *
+      - key: ANTHROPIC_API_KEY
+        sync: false # Claude API Key from Anthropic Console (sk-ant-...)
