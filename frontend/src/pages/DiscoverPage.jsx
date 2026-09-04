@@ -6,6 +6,7 @@ import StatusBadge from '../components/common/StatusBadge';
 import GoogleMapView from '../components/maps/GoogleMapView';
 
 const CATEGORIES = ['All', 'Heritage', 'UNESCO', 'Place of Worship', 'Memorial', 'Observatory'];
+const DEFAULT_PLACE_IMAGE = '/places/red-fort.jpg';
 
 export default function DiscoverPage() {
   const { journey } = useTraveler();
@@ -200,12 +201,16 @@ export default function DiscoverPage() {
               {/* 1. Monument Photo Header */}
               <div className="relative w-full h-44 sm:h-48 overflow-hidden bg-slate-900">
                 <img
-                  src={place.image_url || 'https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=800&q=80'}
+                  src={place.image_url || DEFAULT_PLACE_IMAGE}
                   alt={place.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
+                  referrerPolicy="no-referrer"
                   onError={(e) => {
-                    e.currentTarget.src = 'https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=800&q=80';
+                    if (!e.currentTarget.dataset.fallback) {
+                      e.currentTarget.dataset.fallback = 'true';
+                      e.currentTarget.src = DEFAULT_PLACE_IMAGE;
+                    }
                   }}
                 />
                 {/* Image Gradient Scrim */}
@@ -350,11 +355,15 @@ export default function DiscoverPage() {
             {/* Modal Header Photo */}
             <div className="relative w-full h-48 sm:h-56 rounded-2xl overflow-hidden mb-6 bg-slate-900 border border-white/10">
               <img
-                src={selectedPlace.image_url || 'https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=800&q=80'}
+                src={selectedPlace.image_url || DEFAULT_PLACE_IMAGE}
                 alt={selectedPlace.name}
                 className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
                 onError={(e) => {
-                  e.currentTarget.src = 'https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=800&q=80';
+                  if (!e.currentTarget.dataset.fallback) {
+                    e.currentTarget.dataset.fallback = 'true';
+                    e.currentTarget.src = DEFAULT_PLACE_IMAGE;
+                  }
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />

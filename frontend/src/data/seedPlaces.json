@@ -5,8 +5,16 @@
     "name": "Red Fort (Lal Qila)",
     "hindi_name": "लाल किला",
     "category": "Heritage / UNESCO Site",
-    "coordinates": { "lat": 28.6562, "lng": 77.2410 },
-    "timings": { "opening": "09:30", "closing": "16:30", "closed_on": "Mondays", "evening_show": "18:00 - 21:00 (Light & Sound)" },
+    "coordinates": {
+      "lat": 28.6562,
+      "lng": 77.241
+    },
+    "timings": {
+      "opening": "09:30",
+      "closing": "16:30",
+      "closed_on": "Mondays",
+      "evening_show": "18:00 - 21:00 (Light & Sound)"
+    },
     "fee": {
       "indian": 35,
       "foreigner": 550,
@@ -24,9 +32,14 @@
       "Security checkpoint at Lahori Gate has separate lines for women and foreign visitors with passports/SafeVisit Pass.",
       "Audio guides are available at the official ASI kiosk near the inner gate."
     ],
-    "crowd_data": { "estimated_crowd": "High", "peak_hours": "11:00 - 15:30", "best_time": "Morning 09:30 - 10:30" },
+    "crowd_data": {
+      "estimated_crowd": "High",
+      "peak_hours": "11:00 - 15:30",
+      "best_time": "Morning 09:30 - 10:30"
+    },
     "verification_status": "Official",
-    "last_verified": "2026-08-20"
+    "last_verified": "2026-08-20",
+    "image_url": "/places/red-fort.jpg"
   },
   {
     "id": "pl-qutub-minar-02",
@@ -34,8 +47,15 @@
     "name": "Qutub Minar",
     "hindi_name": "क़ुतुब मीनार",
     "category": "Heritage / UNESCO Site",
-    "coordinates": { "lat": 28.5245, "lng": 77.1855 },
-    "timings": { "opening": "07:00", "closing": "17:00", "closed_on": "Open all days" },
+    "coordinates": {
+      "lat": 28.5245,
+      "lng": 77.1855
+    },
+    "timings": {
+      "opening": "07:00",
+      "closing": "17:00",
+      "closed_on": "Open all days"
+    },
     "fee": {
       "indian": 35,
       "foreigner": 550,
@@ -52,9 +72,14 @@
       "Official ASI e-ticket scanners are located directly at the turnstiles; no paper exchange needed.",
       "Wheelchair-accessible ramps are available through the eastern gate entrance."
     ],
-    "crowd_data": { "estimated_crowd": "Medium", "peak_hours": "14:00 - 16:30", "best_time": "Early Morning 07:30 - 09:00" },
+    "crowd_data": {
+      "estimated_crowd": "Medium",
+      "peak_hours": "14:00 - 16:30",
+      "best_time": "Early Morning 07:30 - 09:00"
+    },
     "verification_status": "Official",
-    "last_verified": "2026-08-20"
+    "last_verified": "2026-08-20",
+    "image_url": "/places/qutub-minar.jpg"
   },
   {
     "id": "pl-humayuns-tomb-03",
@@ -62,8 +87,15 @@
     "name": "Humayun's Tomb",
     "hindi_name": "हुमायूँ का मक़बरा",
     "category": "Heritage / UNESCO Site",
-    "coordinates": { "lat": 28.5933, "lng": 77.2507 },
-    "timings": { "opening": "06:00", "closing": "18:00", "closed_on": "Open all days" },
+    "coordinates": {
+      "lat": 28.5933,
+      "lng": 77.2507
+    },
+    "timings": {
+      "opening": "06:00",
+      "closing": "18:00",
+      "closed_on": "Open all days"
+    },
     "fee": {
       "indian": 35,
       "foreigner": 550,
@@ -80,9 +112,14 @@
       "Water refill station and clean sanitation facilities inside the visitor interpretation center.",
       "Licensed ASI tour guides hold valid laminated government badges with seal."
     ],
-    "crowd_data": { "estimated_crowd": "Medium", "peak_hours": "15:00 - 17:30", "best_time": "Golden hour 16:30 - 17:45" },
+    "crowd_data": {
+      "estimated_crowd": "Medium",
+      "peak_hours": "15:00 - 17:30",
+      "best_time": "Golden hour 16:30 - 17:45"
+    },
     "verification_status": "Official",
-    "last_verified": "2026-08-18"
+    "last_verified": "2026-08-18",
+    "image_url": "/places/humayuns-tomb.jpg"
   },
   {
     "id": "pl-jantar-mantar-04",
@@ -90,8 +127,15 @@
     "name": "Jantar Mantar",
     "hindi_name": "जंतर मंतर",
     "category": "Observatory / Heritage",
-    "coordinates": { "lat": 28.6271, "lng": 77.2166 },
-    "timings": { "opening": "06:00", "closing": "18:00", "closed_on": "Open all days" },
+    "coordinates": {
+      "lat": 28.6271,
+      "lng": 77.2166
+    },
+    "timings": {
+      "opening": "06:00",
+      "closing": "18:00",
+      "closed_on": "Open all days"
+    },
     "fee": {
       "indian": 20,
       "foreigner": 250,
@@ -108,9 +152,14 @@
       "Informational plaques explain astronomical sundial principles in English and Hindi.",
       "Directly covered by New Delhi Tourist Police beat officers on Sansad Marg."
     ],
-    "crowd_data": { "estimated_crowd": "Low", "peak_hours": "12:00 - 14:00", "best_time": "Morning 10:00 - 11:30" },
+    "crowd_data": {
+      "estimated_crowd": "Low",
+      "peak_hours": "12:00 - 14:00",
+      "best_time": "Morning 10:00 - 11:30"
+    },
     "verification_status": "Official",
-    "last_verified": "2026-08-15"
+    "last_verified": "2026-08-15",
+    "image_url": "/places/jantar-mantar.jpg"
   },
   {
     "id": "pl-purana-qila-05",
@@ -118,8 +167,15 @@
     "name": "Purana Qila (Old Fort)",
     "hindi_name": "पुराना क़िला",
     "category": "Heritage Monument",
-    "coordinates": { "lat": 28.6096, "lng": 77.2436 },
-    "timings": { "opening": "07:00", "closing": "17:00", "closed_on": "Open all days" },
+    "coordinates": {
+      "lat": 28.6096,
+      "lng": 77.2436
+    },
+    "timings": {
+      "opening": "07:00",
+      "closing": "17:00",
+      "closed_on": "Open all days"
+    },
     "fee": {
       "indian": 20,
       "foreigner": 250,
@@ -136,9 +192,14 @@
       "Boating lake on outer perimeter is separate from ASI monument entry.",
       "Sound & Light show in evenings booked separately at the north counter."
     ],
-    "crowd_data": { "estimated_crowd": "Low", "peak_hours": "14:00 - 16:00", "best_time": "Morning 08:30 - 10:30" },
+    "crowd_data": {
+      "estimated_crowd": "Low",
+      "peak_hours": "14:00 - 16:00",
+      "best_time": "Morning 08:30 - 10:30"
+    },
     "verification_status": "Official",
-    "last_verified": "2026-08-10"
+    "last_verified": "2026-08-10",
+    "image_url": "/places/purana-qila.jpg"
   },
   {
     "id": "pl-india-gate-06",
@@ -146,8 +207,16 @@
     "name": "India Gate & Kartavya Path",
     "hindi_name": "इंडिया गेट",
     "category": "Memorial / Public Heritage",
-    "coordinates": { "lat": 28.6129, "lng": 77.2295 },
-    "timings": { "opening": "00:00", "closing": "23:59", "closed_on": "Open 24/7", "illumination": "19:00 - 23:00" },
+    "coordinates": {
+      "lat": 28.6129,
+      "lng": 77.2295
+    },
+    "timings": {
+      "opening": "00:00",
+      "closing": "23:59",
+      "closed_on": "Open 24/7",
+      "illumination": "19:00 - 23:00"
+    },
     "fee": {
       "indian": 0,
       "foreigner": 0,
@@ -165,9 +234,14 @@
       "Well lit, heavily patrolled 24/7 by Delhi Police and Central Industrial Security.",
       "National War Memorial is adjacent and free of charge."
     ],
-    "crowd_data": { "estimated_crowd": "High", "peak_hours": "18:00 - 21:30", "best_time": "Early morning 06:30 or Evening 19:30" },
+    "crowd_data": {
+      "estimated_crowd": "High",
+      "peak_hours": "18:00 - 21:30",
+      "best_time": "Early morning 06:30 or Evening 19:30"
+    },
     "verification_status": "Official",
-    "last_verified": "2026-08-25"
+    "last_verified": "2026-08-25",
+    "image_url": "/places/india-gate.jpg"
   },
   {
     "id": "pl-lotus-temple-07",
@@ -175,8 +249,15 @@
     "name": "Lotus Temple (Bahá'í House of Worship)",
     "hindi_name": "कमल मंदिर",
     "category": "Architectural / Place of Worship",
-    "coordinates": { "lat": 28.5535, "lng": 77.2588 },
-    "timings": { "opening": "08:30", "closing": "17:00", "closed_on": "Mondays" },
+    "coordinates": {
+      "lat": 28.5535,
+      "lng": 77.2588
+    },
+    "timings": {
+      "opening": "08:30",
+      "closing": "17:00",
+      "closed_on": "Mondays"
+    },
     "fee": {
       "indian": 0,
       "foreigner": 0,
@@ -193,9 +274,14 @@
       "Strict silence inside the inner sanctuary; photography is prohibited within the inner hall.",
       "Free shoe deposit token counter provided at the entrance."
     ],
-    "crowd_data": { "estimated_crowd": "High", "peak_hours": "13:30 - 16:30", "best_time": "Morning 09:00 - 10:30" },
+    "crowd_data": {
+      "estimated_crowd": "High",
+      "peak_hours": "13:30 - 16:30",
+      "best_time": "Morning 09:00 - 10:30"
+    },
     "verification_status": "Official",
-    "last_verified": "2026-08-19"
+    "last_verified": "2026-08-19",
+    "image_url": "/places/lotus-temple.jpg"
   },
   {
     "id": "pl-akshardham-08",
@@ -203,8 +289,15 @@
     "name": "Swaminarayan Akshardham Temple",
     "hindi_name": "अक्षरधाम मंदिर",
     "category": "Cultural / Religious Complex",
-    "coordinates": { "lat": 28.6127, "lng": 77.2773 },
-    "timings": { "opening": "09:30", "closing": "19:00", "closed_on": "Mondays" },
+    "coordinates": {
+      "lat": 28.6127,
+      "lng": 77.2773
+    },
+    "timings": {
+      "opening": "09:30",
+      "closing": "19:00",
+      "closed_on": "Mondays"
+    },
     "fee": {
       "indian": 0,
       "foreigner": 0,
@@ -222,9 +315,14 @@
       "Strict security: Electronic items (mobile phones, cameras, power banks) are NOT allowed inside; free cloaking lockers available.",
       "Modest dress required: Shoulders, chest, and knees must be covered (free sarongs available at entrance if required)."
     ],
-    "crowd_data": { "estimated_crowd": "High", "peak_hours": "15:00 - 18:30", "best_time": "Morning 10:00 - 12:00" },
+    "crowd_data": {
+      "estimated_crowd": "High",
+      "peak_hours": "15:00 - 18:30",
+      "best_time": "Morning 10:00 - 12:00"
+    },
     "verification_status": "Official",
-    "last_verified": "2026-08-15"
+    "last_verified": "2026-08-15",
+    "image_url": "/places/swaminarayan-akshardham.jpg"
   },
   {
     "id": "pl-jama-masjid-09",
@@ -232,8 +330,15 @@
     "name": "Jama Masjid",
     "hindi_name": "जामा मस्जिद",
     "category": "Historic / Place of Worship",
-    "coordinates": { "lat": 28.6507, "lng": 77.2334 },
-    "timings": { "opening": "07:00", "closing": "18:30", "prayer_breaks": "Closed for non-Muslims 12:00-13:30 & 16:00-17:00" },
+    "coordinates": {
+      "lat": 28.6507,
+      "lng": 77.2334
+    },
+    "timings": {
+      "opening": "07:00",
+      "closing": "18:30",
+      "prayer_breaks": "Closed for non-Muslims 12:00-13:30 & 16:00-17:00"
+    },
     "fee": {
       "indian": 0,
       "foreigner": 0,
@@ -251,9 +356,14 @@
       "Respectful attire mandatory (robes available at Gate 2/3 for a small fee if required).",
       "Remove shoes before stepping into courtyard; shoe-keepers near gates usually expect ₹10-20 tip or carry them in your daypack."
     ],
-    "crowd_data": { "estimated_crowd": "Medium", "peak_hours": "14:00 - 16:00", "best_time": "Morning 08:30 - 10:30" },
+    "crowd_data": {
+      "estimated_crowd": "Medium",
+      "peak_hours": "14:00 - 16:00",
+      "best_time": "Morning 08:30 - 10:30"
+    },
     "verification_status": "Official",
-    "last_verified": "2026-08-12"
+    "last_verified": "2026-08-12",
+    "image_url": "/places/jama-masjid.jpg"
   },
   {
     "id": "pl-bangla-sahib-10",
@@ -261,8 +371,15 @@
     "name": "Gurudwara Bangla Sahib",
     "hindi_name": "गुरुद्वारा बंगला साहिब",
     "category": "Spiritual / Community",
-    "coordinates": { "lat": 28.6263, "lng": 77.2090 },
-    "timings": { "opening": "00:00", "closing": "23:59", "closed_on": "Open 24/7" },
+    "coordinates": {
+      "lat": 28.6263,
+      "lng": 77.209
+    },
+    "timings": {
+      "opening": "00:00",
+      "closing": "23:59",
+      "closed_on": "Open 24/7"
+    },
     "fee": {
       "indian": 0,
       "foreigner": 0,
@@ -281,8 +398,13 @@
       "Shoe deposit and foot-washing pool at entrance are completely free.",
       "Dedicated Foreign Visitor Assistance room near main entrance with English-speaking sevaks."
     ],
-    "crowd_data": { "estimated_crowd": "Medium", "peak_hours": "12:00 - 14:00 & 19:00 - 21:00", "best_time": "Morning 07:00 - 09:30" },
+    "crowd_data": {
+      "estimated_crowd": "Medium",
+      "peak_hours": "12:00 - 14:00 & 19:00 - 21:00",
+      "best_time": "Morning 07:00 - 09:30"
+    },
     "verification_status": "Official",
-    "last_verified": "2026-08-25"
+    "last_verified": "2026-08-25",
+    "image_url": "/places/gurudwara-bangla-sahib.jpg"
   }
 ]

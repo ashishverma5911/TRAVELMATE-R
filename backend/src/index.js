@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -44,6 +45,9 @@ app.use(cors({
 app.use(express.json({ limit: '15mb' })); // Support base64 vehicle images for RideSafe vault
 app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 app.use(morgan('dev'));
+
+// Static places images
+app.use('/places', express.static(path.join(__dirname, '../../frontend/public/places')));
 
 // API Health Check
 app.get('/api/health', (req, res) => {

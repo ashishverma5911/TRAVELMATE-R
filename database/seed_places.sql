@@ -5,13 +5,14 @@
 -- official_ticket_url, safety_notes, crowd_data, verification_status
 -- ==============================================================================
 
-INSERT INTO places (place_key, name, hindi_name, category, coordinates, timings, fee, official_ticket_url, safety_notes, crowd_data, verification_status, last_verified)
+INSERT INTO places (place_key, name, hindi_name, category, image_url, coordinates, timings, fee, official_ticket_url, safety_notes, crowd_data, verification_status, last_verified)
 VALUES
 (
     'red-fort',
     'Red Fort (Lal Qila)',
     'लाल किला',
     'Heritage / UNESCO Site',
+        '/places/red-fort.jpg',
     '{"lat": 28.6562, "lng": 77.2410}'::jsonb,
     '{"opening": "09:30", "closing": "16:30", "closed_on": "Mondays", "evening_show": "18:00 - 21:00 (Light & Sound)"}'::jsonb,
     '{
@@ -40,6 +41,7 @@ VALUES
     'Qutub Minar',
     'क़ुतुब मीनार',
     'Heritage / UNESCO Site',
+        '/places/qutub-minar.jpg',
     '{"lat": 28.5245, "lng": 77.1855}'::jsonb,
     '{"opening": "07:00", "closing": "17:00", "closed_on": "Open all days"}'::jsonb,
     '{
@@ -67,6 +69,7 @@ VALUES
     'Humayun''s Tomb',
     'हुमायूँ का मक़बरा',
     'Heritage / UNESCO Site',
+        '/places/humayuns-tomb.jpg',
     '{"lat": 28.5933, "lng": 77.2507}'::jsonb,
     '{"opening": "06:00", "closing": "18:00", "closed_on": "Open all days"}'::jsonb,
     '{
@@ -94,6 +97,7 @@ VALUES
     'Jantar Mantar',
     'जंतर मंतर',
     'Observatory / Heritage',
+        '/places/jantar-mantar.jpg',
     '{"lat": 28.6271, "lng": 77.2166}'::jsonb,
     '{"opening": "06:00", "closing": "18:00", "closed_on": "Open all days"}'::jsonb,
     '{
@@ -121,6 +125,7 @@ VALUES
     'Purana Qila (Old Fort)',
     'पुराना क़िला',
     'Heritage Monument',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Purana_Qila_01.jpg/800px-Purana_Qila_01.jpg',
     '{"lat": 28.6096, "lng": 77.2436}'::jsonb,
     '{"opening": "07:00", "closing": "17:00", "closed_on": "Open all days"}'::jsonb,
     '{
@@ -148,6 +153,7 @@ VALUES
     'India Gate & Kartavya Path',
     'इंडिया गेट',
     'Memorial / Public Heritage',
+        '/places/india-gate.jpg',
     '{"lat": 28.6129, "lng": 77.2295}'::jsonb,
     '{"opening": "00:00", "closing": "23:59", "closed_on": "Open 24/7", "illumination": "19:00 - 23:00"}'::jsonb,
     '{
@@ -176,6 +182,7 @@ VALUES
     'Lotus Temple (Bahá''í House of Worship)',
     'कमल मंदिर',
     'Architectural / Place of Worship',
+        '/places/lotus-temple.jpg',
     '{"lat": 28.5535, "lng": 77.2588}'::jsonb,
     '{"opening": "08:30", "closing": "17:00", "closed_on": "Mondays"}'::jsonb,
     '{
@@ -203,6 +210,7 @@ VALUES
     'Swaminarayan Akshardham Temple',
     'अक्षरधाम मंदिर',
     'Cultural / Religious Complex',
+        '/places/swaminarayan-akshardham.jpg',
     '{"lat": 28.6127, "lng": 77.2773}'::jsonb,
     '{"opening": "09:30", "closing": "19:00", "closed_on": "Mondays"}'::jsonb,
     '{
@@ -231,6 +239,7 @@ VALUES
     'Jama Masjid',
     'जामा मस्जिद',
     'Historic / Place of Worship',
+        '/places/jama-masjid.jpg',
     '{"lat": 28.6507, "lng": 77.2334}'::jsonb,
     '{"opening": "07:00", "closing": "18:30", "prayer_breaks": "Closed for non-Muslims 12:00-13:30 & 16:00-17:00"}'::jsonb,
     '{
@@ -259,6 +268,7 @@ VALUES
     'Gurudwara Bangla Sahib',
     'गुरुद्वारा बंगला साहिब',
     'Spiritual / Community',
+        '/places/gurudwara-bangla-sahib.jpg',
     '{"lat": 28.6263, "lng": 77.2090}'::jsonb,
     '{"opening": "00:00", "closing": "23:59", "closed_on": "Open 24/7"}'::jsonb,
     '{
@@ -285,6 +295,7 @@ VALUES
 )
 ON CONFLICT (place_key) DO UPDATE 
 SET 
+    image_url = EXCLUDED.image_url,
     timings = EXCLUDED.timings,
     fee = EXCLUDED.fee,
     official_ticket_url = EXCLUDED.official_ticket_url,

@@ -13,7 +13,7 @@ const INITIAL_PLACES = [
     name: "Red Fort (Lal Qila)",
     hindi_name: "लाल किला",
     category: "Heritage / UNESCO Site",
-    image_url: "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=800&q=80",
+    image_url: "/places/red-fort.jpg",
     best_time_to_visit: "Early Morning (09:30 – 11:00 AM) — Beat the intense Delhi afternoon heat and avoid peak tour bus crowds at Lahori Gate.",
     lighting_tip: "Golden hour (16:00 - 17:30) casts warm amber light across the massive red sandstone ramparts.",
     coordinates: { lat: 28.6562, lng: 77.2410 },
@@ -45,7 +45,7 @@ const INITIAL_PLACES = [
     name: "Qutub Minar",
     hindi_name: "क़ुतुब मीनार",
     category: "Heritage / UNESCO Site",
-    image_url: "https://images.unsplash.com/photo-1545126029-58b8d46fb38d?auto=format&fit=crop&w=800&q=80",
+    image_url: "/places/qutub-minar.jpg",
     best_time_to_visit: "Early Morning (07:00 – 09:00 AM) — Cool morning breeze, minimal crowds around the Iron Pillar, and soft directional light.",
     lighting_tip: "Early morning sun creates sharp relief on the intricate Arabic calligraphy bands.",
     coordinates: { lat: 28.5245, lng: 77.1855 },
@@ -76,7 +76,7 @@ const INITIAL_PLACES = [
     name: "Humayun's Tomb",
     hindi_name: "हुमायूँ का मक़बरा",
     category: "Heritage / UNESCO Site",
-    image_url: "https://images.unsplash.com/photo-1592635196078-9fdc757f27f4?auto=format&fit=crop&w=800&q=80",
+    image_url: "/places/humayuns-tomb.jpg",
     best_time_to_visit: "Late Afternoon (15:30 – 17:30) — Experience the spectacular warm sunset glow illuminating the red sandstone dome.",
     lighting_tip: "Sunset backlights the Charbagh geometric water channels and Persian pavilion arches.",
     coordinates: { lat: 28.5933, lng: 77.2507 },
@@ -106,7 +106,7 @@ const INITIAL_PLACES = [
     name: "India Gate & Kartavya Path",
     hindi_name: "इंडिया गेट एवं कर्तव्य पथ",
     category: "Memorial / Public Monument",
-    image_url: "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=800&q=80",
+    image_url: "/places/india-gate.jpg",
     best_time_to_visit: "Evening (18:00 – 21:00) — Dramatic night floodlights, cool breeze along Kartavya Path, and the Amar Jawan Jyoti flame.",
     lighting_tip: "Architectural floodlights turn the 42-meter triumphal arch into a brilliant golden landmark after 19:00.",
     coordinates: { lat: 28.6129, lng: 77.2295 },
@@ -137,7 +137,7 @@ const INITIAL_PLACES = [
     name: "Lotus Temple (Baháʼí House of Worship)",
     hindi_name: "लोटस टेम्पल (बहाई उपासना मंदिर)",
     category: "Place of Worship / Architecture",
-    image_url: "https://images.unsplash.com/photo-1598890777032-bde835ba27c2?auto=format&fit=crop&w=800&q=80",
+    image_url: "/places/lotus-temple.jpg",
     best_time_to_visit: "Morning (09:00 – 10:30 AM) — Quietest time inside the meditation hall and best ambient light reflecting off the 9 surrounding blue water pools.",
     lighting_tip: "Morning sun casts immaculate bright highlights on the 27 freestanding white marble petals.",
     coordinates: { lat: 28.5535, lng: 77.2588 },
@@ -169,7 +169,7 @@ const INITIAL_PLACES = [
     name: "Swaminarayan Akshardham",
     hindi_name: "स्वामीनारायण अक्षरधाम",
     category: "Spiritual / Cultural Campus",
-    image_url: "https://images.unsplash.com/photo-1628172909068-163e528a4753?auto=format&fit=crop&w=800&q=80",
+    image_url: "/places/swaminarayan-akshardham.jpg",
     best_time_to_visit: "Late Afternoon to Evening (16:00 – 20:00) — Stroll the Mandir carving corridors, followed by the Sahaj Anand musical water fountain show at dusk.",
     lighting_tip: "The dusk Sahaj Anand water show features synchronised laser lights and water jets.",
     coordinates: { lat: 28.6127, lng: 77.2773 },
@@ -202,7 +202,7 @@ const INITIAL_PLACES = [
     name: "Jantar Mantar",
     hindi_name: "जंतर मंतर",
     category: "Heritage / Astronomical Observatory",
-    image_url: "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=800&q=80",
+    image_url: "/places/jantar-mantar.jpg",
     best_time_to_visit: "Mid-Day / Noon (11:30 AM – 01:30 PM) — Optimal direct sunlight to see the massive sundials and equinoctial instruments cast exact geometric time shadows.",
     lighting_tip: "High sun overhead casts crisp astronomical shadows across the red masonry instruments.",
     coordinates: { lat: 28.6271, lng: 77.2166 },
@@ -232,7 +232,7 @@ const INITIAL_PLACES = [
     name: "Safdarjung's Tomb",
     hindi_name: "सफ़दरजंग का मक़बरा",
     category: "Heritage / Mughal Architecture",
-    image_url: "https://images.unsplash.com/photo-1545126029-58b8d46fb38d?auto=format&fit=crop&w=800&q=80",
+    image_url: "/places/safdarjung-tomb.jpg",
     best_time_to_visit: "Early Morning (07:00 – 09:00 AM) — Peaceful, uncrowded Mughal garden with birdsong, very low visitor density, and soft morning mist.",
     lighting_tip: "Warm dawn sunlight glints through the ornate marble lattice screens of the central pavilion.",
     coordinates: { lat: 28.5893, lng: 77.2106 },
@@ -262,7 +262,7 @@ const INITIAL_PLACES = [
     name: "Jama Masjid",
     hindi_name: "जामा मस्जिद",
     category: "Historic / Place of Worship",
-    image_url: "https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=800&q=80",
+    image_url: "/places/jama-masjid.jpg",
     best_time_to_visit: "Early Morning (08:00 – 10:30 AM) — Peaceful expansive courtyard before midday prayers (closed to tourists 12:00–13:30), softer light on minarets.",
     lighting_tip: "Morning sun illuminates the red sandstone gateway without courtyard ground heat.",
     coordinates: { lat: 28.6507, lng: 77.2334 },
@@ -294,7 +294,7 @@ const INITIAL_PLACES = [
     name: "Gurudwara Bangla Sahib",
     hindi_name: "गुरुद्वारा बंगला साहिब",
     category: "Spiritual / Community",
-    image_url: "https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=800&q=80",
+    image_url: "/places/gurudwara-bangla-sahib.jpg",
     best_time_to_visit: "Early Morning (07:00 – 09:30 AM) or Evening (08:00 – 10:00 PM) — Divine live Gurbani kirtan, tranquil reflection by the Sarovar pool, and fresh Langar.",
     lighting_tip: "Night illumination reflects the shimmering golden dome across the sacred water pool.",
     coordinates: { lat: 28.6263, lng: 77.2090 },
@@ -480,7 +480,13 @@ async function initDatabase() {
         }
         console.log(`[Database] ✅ Seeded ${INITIAL_PLACES.length} verified monuments into PostgreSQL.`);
       } else {
-        console.log(`[Database] Places table already contains ${placeCount} verified sites.`);
+        console.log(`[Database] Places table already contains ${placeCount} verified sites. Synchronizing verified photos...`);
+        for (const p of INITIAL_PLACES) {
+          await client.query(
+            `UPDATE places SET image_url = $1 WHERE place_key = $2;`,
+            [p.image_url, p.place_key]
+          );
+        }
       }
 
       // 3. Check and Seed Safety Zones
