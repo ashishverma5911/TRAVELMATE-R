@@ -1,11 +1,34 @@
 import React, { useState } from 'react';
-import { X, Globe, Volume2, Maximize2, Minimize2, Search, Check, Sparkles, MessageSquare, Car, IndianRupee, ShieldAlert, Landmark } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import {
+  X,
+  Globe,
+  Volume2,
+  Maximize2,
+  Minimize2,
+  Search,
+  Check,
+  Sparkles,
+  MessageSquare,
+  Car,
+  IndianRupee,
+  ShieldAlert,
+  Landmark,
+  ExternalLink,
+} from 'lucide-react';
 import offlinePhrases from '../../data/offlinePhrases.json';
 import { useTraveler } from '../../context/TravelerContext';
 import StatusBadge from './StatusBadge';
+import {
+  translateText,
+  playAudioSpeech,
+  stopAudioSpeech,
+  PRELOADED_TOURIST_PHRASES,
+} from '../../services/bhashiniService';
 
 export default function LanguageSupportModal({ isOpen, onClose }) {
   const { traveler } = useTraveler();
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [fullscreenPhrase, setFullscreenPhrase] = useState(null);
@@ -15,70 +38,56 @@ export default function LanguageSupportModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const categories = ['All', 'Transport & Meter', 'Fair Fare & Negotiation', 'Emergency & Safety', 'Heritage & Cultural Etiquette'];
+  const categories = [
+    'All',
+    'Transport & Meter',
+    'Fair Fare & Negotiation',
+    'Emergency & Safety',
+    'Heritage & Cultural Etiquette',
+  ];
 
   const getCategoryIcon = (cat) => {
     switch (cat) {
-      case 'Transport & Meter': return <Car className="w-3.5 h-3.5" />;
-      case 'Fair Fare & Negotiation': return <IndianRupee className="w-3.5 h-3.5" />;
-      case 'Emergency & Safety': return <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />;
-      case 'Heritage & Cultural Etiquette': return <Landmark className="w-3.5 h-3.5" />;
-      default: return <MessageSquare className="w-3.5 h-3.5" />;
+      case 'Transport & Meter':
+        return <Car className="w-3.5 h-3.5" />;
+      case 'Fair Fare & Negotiation':
+        return <IndianRupee className="w-3.5 h-3.5" />;
+      case 'Emergency & Safety':
+        return <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />;
+      case 'Heritage & Cultural Etiquette':
+        return <Landmark className="w-3.5 h-3.5" />;
+      default:
+        return <MessageSquare className="w-3.5 h-3.5" />;
     }
   };
 
   const handleSpeak = (text) => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'hi-IN';
-      utterance.rate = 0.9;
-      window.speechSynthesis.speak(utterance);
+    playAudioSpeech(text, 'hi');
+  };
+
+  const handleBhashiniTranslate = async () => {
+    if (!bhashiniInput.trim()) return;
+    setIsTranslating(true);
+    try {
+      const res = await translateText({ text: bhashiniInput, sourceLang: 'en', targetLang: 'hi' });
+      setBhashiniResult({
+        original: bhashiniInput,
+        hindi: res.hindi,
+        transliteration: res.transliteration,
+        phonetic: res.phonetic,
+        service: res.source,
+        confidence: `${Math.round(res.confidence * 100)}% Contextual Match`,
+      });
+    } catch (err) {
+      console.error('Translation error:', err);
+    } finally {
+      setIsTranslating(false);
     }
   };
 
-  const handleBhashiniTranslate = () => {
-    if (!bhashiniInput.trim()) return;
-    setIsTranslating(true);
-    setTimeout(() => {
-      // Bhashini intelligent mock translator
-      const input = bhashiniInput.trim().toLowerCase();
-      let hindi = "भैया, कृपया मीटर से चलिए।";
-      let translit = "Bhaiya, kripya meter se chaliye.";
-      let phonetic = "Bhai-ya, krip-ya mee-tur say chuh-lee-ye";
-
-      if (input.includes('how much') || input.includes('price') || input.includes('cost')) {
-        hindi = "यह कितने का है? सरकारी दर क्या है?";
-        translit = "Yeh kitne ka hai? Sarkari dar kya hai?";
-        phonetic = "Yeh kit-nay kuh hai? Sur-kaa-ree dur kyuh hai?";
-      } else if (input.includes('stop') || input.includes('wait')) {
-        hindi = "कृपया यहाँ रोक दीजिए, मुझे यहाँ उतरना है।";
-        translit = "Kripya yahan rok dijiye, mujhe yahan utarna hai.";
-        phonetic = "Krip-ya yuh-haan rok dee-jee-ye";
-      } else if (input.includes('police') || input.includes('help') || input.includes('unsafe')) {
-        hindi = "मुझे तुरंत पुलिस सहायता चाहिए, 112 पर फोन कीजिए।";
-        translit = "Mujhe turant police sahayata chahiye, 112 par phone kijiye.";
-        phonetic = "Moo-jhay too-runt po-lees suh-haa-yuh-tuh chaa-hi-ye";
-      } else if (input.includes('red fort')) {
-        hindi = "कृपया मुझे लाल किले के मुख्य प्रवेश द्वार (लाहौरी गेट) ले चलिए।";
-        translit = "Kripya mujhe Lal Qila ke mukhya pravesh dwar le chaliye.";
-        phonetic = "Krip-ya moo-jhay Laal Kee-la lay chuh-lee-ye";
-      } else {
-        hindi = `नमस्ते, ${bhashiniInput} (सरकारी अनुवाद)`;
-        translit = `Namaste, ${bhashiniInput}`;
-        phonetic = "Nuh-mus-tay";
-      }
-
-      setBhashiniResult({
-        original: bhashiniInput,
-        hindi,
-        transliteration: translit,
-        phonetic,
-        service: "BHASHINI AI Engine (Govt of India)",
-        confidence: "97% Contextual Match"
-      });
-      setIsTranslating(false);
-    }, 600);
+  const handleOpenFullPage = () => {
+    onClose();
+    navigate('/phrase-helper');
   };
 
   // Filter phrases
@@ -87,19 +96,21 @@ export default function LanguageSupportModal({ isOpen, onClose }) {
     return true;
   });
 
-  const filteredGroups = allPhrasesGrouped.map((group) => {
-    const matchingPhrases = group.phrases.filter((p) => {
-      if (!searchQuery.trim()) return true;
-      const q = searchQuery.toLowerCase();
-      return (
-        p.english.toLowerCase().includes(q) ||
-        p.hindi.includes(q) ||
-        p.transliteration.toLowerCase().includes(q) ||
-        p.context.toLowerCase().includes(q)
-      );
-    });
-    return { ...group, phrases: matchingPhrases };
-  }).filter((group) => group.phrases.length > 0);
+  const filteredGroups = allPhrasesGrouped
+    .map((group) => {
+      const matchingPhrases = group.phrases.filter((p) => {
+        if (!searchQuery.trim()) return true;
+        const q = searchQuery.toLowerCase();
+        return (
+          p.english.toLowerCase().includes(q) ||
+          p.hindi.includes(q) ||
+          p.transliteration.toLowerCase().includes(q) ||
+          p.context.toLowerCase().includes(q)
+        );
+      });
+      return { ...group, phrases: matchingPhrases };
+    })
+    .filter((group) => group.phrases.length > 0);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md transition-all">
@@ -123,7 +134,7 @@ export default function LanguageSupportModal({ isOpen, onClose }) {
               "{fullscreenPhrase.transliteration}"
             </p>
             <div className="pt-4 border-t border-white/10 text-xs text-slate-300">
-              English: <strong>{fullscreenPhrase.english}</strong>
+              English: <strong>{fullscreenPhrase.english || fullscreenPhrase.original}</strong>
             </div>
             <button
               onClick={() => handleSpeak(fullscreenPhrase.hindi)}
@@ -150,16 +161,26 @@ export default function LanguageSupportModal({ isOpen, onClose }) {
                 <StatusBadge status="Official" />
               </div>
               <p className="text-xs text-slate-400">
-                BHASHINI Powered • Preloaded Offline Fallback for {traveler?.preferred_language?.toUpperCase() || 'EN'} &lt;–&gt; HI
+                BHASHINI Powered • Speech &amp; Text Translation for {traveler?.preferred_language?.toUpperCase() || 'EN'} &lt;–&gt; HI
               </p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-white/5"
-          >
-            <X className="w-5 h-5" />
-          </button>
+
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleOpenFullPage}
+              className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 rounded-xl text-xs font-semibold transition-all"
+            >
+              <span>Full Page</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={onClose}
+              className="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-white/5"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Bhashini Live Translator Input Section */}
@@ -167,9 +188,15 @@ export default function LanguageSupportModal({ isOpen, onClose }) {
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-indigo-300 flex items-center space-x-1.5">
               <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Bhashini English → Hindi Real-time Translator</span>
+              <span>Digital India Bhashini English → Hindi Translator</span>
             </span>
-            <span className="text-[10px] text-slate-400">National Language Translation Mission</span>
+            <button
+              onClick={handleOpenFullPage}
+              className="text-[11px] text-emerald-400 hover:underline flex items-center space-x-1"
+            >
+              <span>Try Speech-to-Speech Voice</span>
+              <ExternalLink className="w-3 h-3" />
+            </button>
           </div>
 
           <div className="flex gap-2">
@@ -316,7 +343,13 @@ export default function LanguageSupportModal({ isOpen, onClose }) {
         {/* Footer info */}
         <div className="p-3 bg-surface-card border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
           <span>All phrase cards are stored offline for instant zero-data use during transit.</span>
-          <span className="text-emerald-400 font-semibold">Offline Ready ✓</span>
+          <button
+            onClick={handleOpenFullPage}
+            className="text-emerald-400 hover:underline font-semibold flex items-center space-x-1"
+          >
+            <span>Open Dedicated Phrase Helper</span>
+            <ExternalLink className="w-3 h-3" />
+          </button>
         </div>
       </div>
     </div>

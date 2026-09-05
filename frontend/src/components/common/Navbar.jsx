@@ -1,11 +1,23 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { QrCode, MapPin, Calculator, Navigation, Camera, AlertCircle, LayoutDashboard } from 'lucide-react';
+import {
+  QrCode,
+  MapPin,
+  CalendarDays,
+  Globe,
+  Calculator,
+  Navigation,
+  Camera,
+  AlertCircle,
+  LayoutDashboard,
+} from 'lucide-react';
 
 export default function Navbar() {
   const navItems = [
     { to: '/', label: 'Safe Pass', icon: QrCode },
     { to: '/discover', label: 'Verified Places', icon: MapPin },
+    { to: '/planner', label: 'Trip Planner', icon: CalendarDays },
+    { to: '/phrase-helper', label: 'Phrase Helper', icon: Globe },
     { to: '/fare-meter', label: 'Fair Fare', icon: Calculator },
     { to: '/safe-journey', label: 'Safe Track', icon: Navigation },
     { to: '/vault', label: 'RideSafe Vault', icon: Camera },
@@ -25,7 +37,7 @@ export default function Navbar() {
                 to={item.to}
                 id={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                 className={({ isActive }) =>
-                  `flex flex-col md:flex-row items-center space-y-1 md:space-y-0 md:space-x-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${
+                  `flex flex-col md:flex-row items-center space-y-1 md:space-y-0 md:space-x-2 px-2.5 py-1.5 rounded-xl text-xs font-medium transition-all ${
                     isActive
                       ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 shadow-sm'
                       : 'text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent'
