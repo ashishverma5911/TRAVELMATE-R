@@ -19,7 +19,9 @@ import {
   ChevronRight,
   ShieldAlert,
   PhoneCall,
-  UserCheck
+  UserCheck,
+  Download,
+  FileArchive
 } from 'lucide-react';
 import { useTraveler } from '../context/TravelerContext';
 import { useJourneyChain } from '../context/JourneyChainContext';
@@ -347,6 +349,47 @@ export default function OnboardingPage() {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* PROJECT SOURCE CODE ZIP DOWNLOAD BANNER */}
+      <div className="glass-card p-6 sm:p-7 rounded-3xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/30 via-slate-900 to-indigo-950/30 relative overflow-hidden">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
+          <div className="space-y-1.5">
+            <div className="flex items-center space-x-2 text-emerald-400 text-xs font-bold tracking-wider uppercase">
+              <FileArchive className="w-4 h-4" />
+              <span>Full Source Code Available</span>
+            </div>
+            <h3 className="text-lg md:text-xl font-bold font-display text-white">
+              Download Full Project Code (.ZIP)
+            </h3>
+            <p className="text-xs text-slate-300 max-w-xl leading-relaxed">
+              Contains the complete TravelMate application (React 18 frontend, Express backend, database schemas, and AI translation services). Clean and ready to run locally.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <a
+              href="/travelmate-source.zip"
+              download="travelmate-source.zip"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="btn-home-download-zip"
+              className="py-2.5 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center space-x-2 shadow-lg shadow-emerald-500/20 transition-all active:scale-95"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download ZIP (2.8 MB)</span>
+            </a>
+
+            <Link
+              to="/download"
+              id="btn-home-download-center"
+              className="py-2.5 px-4 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/10 text-white font-semibold text-xs flex items-center space-x-1.5 transition-all"
+            >
+              <span>Download Page & Setup Guide</span>
+              <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
+            </Link>
+          </div>
         </div>
       </div>
 

@@ -63,15 +63,15 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Download Source Code Zip Archive
+// Download Source Code Zip Archive (if archive exists)
 app.get('/api/download-zip', (req, res) => {
   const zipPath = path.join(__dirname, '../../frontend/public/travelmate-source.zip');
+  if (!fs.existsSync(zipPath)) {
+    return res.status(404).json({ error: 'Source archive removed for production repository export.' });
+  }
   res.download(zipPath, 'travelmate-project-source.zip', (err) => {
-    if (err) {
-      console.error('Error serving zip download:', err);
-      if (!res.headersSent) {
-        res.status(500).json({ error: 'Zip file could not be downloaded' });
-      }
+    if (err && !res.headersSent) {
+      res.status(500).json({ error: 'Zip file could not be downloaded' });
     }
   });
 });
@@ -301,8 +301,7 @@ translateRouter.post('/', async (req, res) => {
   try {
     const { text, audioContent, sourceLang = 'en', targetLang = 'hi', computeTTS = false } = req.body;
     
-    // User ID: 6af39cd08a544780a3113505810c79be
-    const userId = process.env.BHASHINI_USER_ID || '6af39cd08a544780a3113505810c79be';
+    const userId = process.env.BHASHINI_USER_ID || '';
     const apiKey = process.env.BHASHINI_API_KEY;
     const inferenceKey = process.env.BHASHINI_INFERENCE_API_KEY || apiKey;
     const endpoint = process.env.BHASHINI_PIPELINE_ENDPOINT || 'https://dhruva-api.bhashini.gov.in/services/inference/pipeline';

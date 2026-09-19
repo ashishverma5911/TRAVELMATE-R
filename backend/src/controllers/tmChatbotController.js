@@ -33,7 +33,7 @@ const PLACES_KNOWLEDGE = [
   },
   {
     name: "Qutub Minar",
-    hindi: "क़ुतुब मीनar",
+    hindi: "क़ुतुब मीनार",
     category: "Heritage / UNESCO Site",
     timings: "07:00 AM - 05:00 PM (Open Daily)",
     ticket: "Foreigners: ₹550 | Indians: ₹40 | SAARC/BIMSTEC: ₹40 | Children under 15: Free",

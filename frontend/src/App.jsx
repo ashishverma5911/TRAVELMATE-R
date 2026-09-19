@@ -22,6 +22,7 @@ import IncidentReportPage from './pages/IncidentReportPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import TripPlannerPage from './pages/TripPlannerPage';
 import BhashiniTranslatorPage from './pages/BhashiniTranslatorPage';
+import DownloadPage from './pages/DownloadPage';
 import { Bot } from 'lucide-react';
 
 export default function App() {
@@ -83,6 +84,11 @@ export default function App() {
                   {/* Internal Admin Moderation (Preserved on /admin and /admin-internal, protected) */}
                   <Route path="/admin" element={<AdminDashboardPage />} />
                   <Route path="/admin-internal" element={<AdminDashboardPage />} />
+
+                  {/* Project Code ZIP Download */}
+                  <Route path="/download" element={<DownloadPage />} />
+                  <Route path="/download-zip" element={<DownloadPage />} />
+                  <Route path="/export" element={<DownloadPage />} />
 
                   {/* Fallback */}
                   <Route path="*" element={<Navigate to="/" replace />} />

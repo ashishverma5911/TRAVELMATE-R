@@ -102,12 +102,15 @@ export default function Header({ onOpenQR, onOpenLang }) {
           <a
             href="/travelmate-source.zip"
             download="travelmate-source.zip"
+            target="_blank"
+            rel="noopener noreferrer"
             id="btn-header-download-zip"
             title="Download Complete Project Source Code (.ZIP)"
-            className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 hover:border-emerald-400 text-emerald-300 text-xs font-semibold transition-all shadow-sm group"
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 hover:border-emerald-400 text-emerald-200 text-xs font-bold transition-all shadow-sm active:scale-95 group"
           >
             <Download className="w-3.5 h-3.5 text-emerald-400 group-hover:-translate-y-0.5 transition-transform" />
-            <span>Download ZIP</span>
+            <span className="hidden xs:inline">Download ZIP</span>
+            <span className="xs:hidden">ZIP</span>
           </a>
 
           {/* User Portal Avatar (Replaces Admin Portal in Main Nav) */}

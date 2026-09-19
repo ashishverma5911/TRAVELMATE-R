@@ -29,6 +29,7 @@ pnpm-debug.log*
 .turbo/
 
 # OS and Editor files
+*.zip
 .DS_Store
 Thumbs.db
 *.swp
