@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, AlertTriangle, ShieldCheck, Send, Sparkles, PhoneCall, CheckCircle2, UserX, Camera, Smartphone, Check } from 'lucide-react';
 import { useTraveler } from '../context/TravelerContext';
+import { useJourneyChain } from '../context/JourneyChainContext';
 import { api, AI_BASE } from '../services/api';
 import StatusBadge from '../components/common/StatusBadge';
 
 export default function IncidentReportPage() {
   const { traveler, journey } = useTraveler();
+  const { activeJourney, addTimelineEvent } = useJourneyChain();
 
   const [rawText, setRawText] = useState(
     'Auto driver outside New Delhi Railway Station exit demanded 500 rupees to go to Red Fort and refused to run the meter. He also said all prepaid counters are closed today.'
@@ -93,7 +95,7 @@ export default function IncidentReportPage() {
     }
   };
 
-  const handleStructureWithClaude = async () => {
+  const handleStructureWithAI = async () => {
     if (!rawText.trim()) return;
     setIsStructuring(true);
     setSubmissionStatus(null);
@@ -149,6 +151,12 @@ export default function IncidentReportPage() {
           id: res.data.id,
           message: 'Incident successfully queued for human administration verification.'
         });
+        addTimelineEvent({
+          title: `Incident Filed: Ref #${res.data.id || 'INC-DEL-01'}`,
+          module: 'Incident Report',
+          description: `Filed formal report: "${structuredPreview?.category || 'Transport Disruption'}". Linked ${selectedEvidenceIds.length} evidence attachments.`,
+          actionPath: '/incident-report'
+        });
       }
     } catch (e) {
       console.error(e);
@@ -156,29 +164,29 @@ export default function IncidentReportPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
         <div>
-          <div className="inline-flex items-center space-x-2 text-rose-400 text-xs font-bold uppercase tracking-wider mb-1">
-            <AlertCircle className="w-4 h-4" />
-            <span>Incident Structuring & Admin Escrow</span>
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-semibold mb-2">
+            <AlertCircle className="w-3.5 h-3.5 text-rose-400" />
+            <span>Incident Logging • Active Chain: {activeJourney.id}</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white">
-            Incident Reporting & Claude Auto-Structuring
+          <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
+            Incident Reporting & Gemini AI Auto-Structuring
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Submit in any language. Claude parses facts into standardized schema for human police verification.
+          <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl leading-relaxed">
+            Submit in any language. Gemini AI parses facts into standardized schema for human police verification.
           </p>
         </div>
 
         {/* Emergency Actions Bar (Manual SOS + Silent Shake Simulator) */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2.5">
           <button
             id="btn-simulate-shake-sos"
             onClick={() => triggerEmergencySOS('silent_gesture_shake')}
             title="Simulate 3 rapid phone shakes (DeviceMotionEvent) for desktop testing"
-            className="px-4 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-400/40 text-slate-300 hover:text-white font-bold rounded-xl text-xs flex items-center space-x-2 transition-all group"
+            className="px-4 py-2.5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-cyan-400/40 text-slate-300 hover:text-white font-bold rounded-xl text-xs flex items-center space-x-2 transition-all group backdrop-blur-md"
           >
             <Smartphone className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
             <span className="hidden sm:inline">Simulate Silent Shake (3x)</span>
@@ -188,7 +196,7 @@ export default function IncidentReportPage() {
           <button
             id="btn-emergency-sos-report"
             onClick={() => triggerEmergencySOS('manual_button')}
-            className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-xl text-xs flex items-center space-x-2 shadow-lg shadow-red-600/30 transition-all hover:scale-105 active:scale-95"
+            className="px-5 py-2.5 bg-gradient-to-r from-red-600 via-rose-600 to-red-700 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-xl text-xs flex items-center space-x-2 shadow-lg shadow-red-600/30 transition-all hover:scale-105 active:scale-95"
           >
             <PhoneCall className="w-4 h-4 animate-bounce" />
             <span>Immediate SOS 112 Dispatch</span>
@@ -197,7 +205,7 @@ export default function IncidentReportPage() {
       </div>
 
       {silentSosFired && (
-        <div className="mb-6 p-4 rounded-2xl bg-red-600/20 border border-red-500/40 text-red-300 text-xs font-semibold flex items-center justify-between">
+        <div className="mb-6 p-4 rounded-2xl bg-red-600/20 border border-red-500/40 text-red-300 text-xs font-semibold flex items-center justify-between shadow-2xl">
           <div className="flex items-center space-x-3">
             <AlertTriangle className="w-5 h-5 text-red-400 shrink-0" />
             <div>
@@ -233,7 +241,7 @@ export default function IncidentReportPage() {
             rows="5"
             value={rawText}
             onChange={(e) => setRawText(e.target.value)}
-            className="w-full p-4 bg-surface border border-surface-border rounded-2xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 leading-relaxed"
+            className="w-full p-4 bg-white/[0.03] border border-white/10 rounded-2xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500/60 leading-relaxed shadow-inner"
           />
 
           {/* Linked Evidence from RideSafe Vault (Scope #11) */}
@@ -300,20 +308,20 @@ export default function IncidentReportPage() {
           </div>
 
           <button
-            id="btn-structure-incident-claude"
-            onClick={handleStructureWithClaude}
+            id="btn-structure-incident-ai"
+            onClick={handleStructureWithAI}
             disabled={isStructuring || !rawText.trim()}
-            className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl text-xs flex items-center justify-center space-x-2 shadow-lg shadow-indigo-600/25 transition-all"
+            className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl text-xs flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/25 transition-all"
           >
             <Sparkles className="w-4 h-4" />
-            <span>{isStructuring ? 'Claude Structuring Schema...' : 'Run Claude Auto-Structuring'}</span>
+            <span>{isStructuring ? 'Gemini AI Structuring Schema...' : 'Run Gemini AI Auto-Structuring'}</span>
           </button>
 
           {/* AI Decision Support Disclaimer (Core Design Principle) */}
           <div className="p-3 rounded-xl bg-surface border border-surface-border text-[11px] text-slate-400 space-y-1">
             <span className="font-bold text-slate-300 block">AI Decision-Support Boundary:</span>
             <p>
-              Claude strictly extracts and standardizes fields (location, time, parties).
+              Gemini strictly extracts and standardizes fields (location, time, parties).
               It does NOT determine guilt, assess legal liability, or close cases.
               All reports are queued for human administrator review.
             </p>
@@ -323,10 +331,10 @@ export default function IncidentReportPage() {
         {/* Structured Schema Preview & Submit */}
         <div className="lg:col-span-6 space-y-6">
           {structuredPreview ? (
-            <div className="glass-card p-6 rounded-3xl space-y-4 border border-indigo-500/30">
+            <div className="glass-card p-6 rounded-3xl space-y-4 border border-emerald-500/30">
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                <span className="text-xs font-bold uppercase text-indigo-400 tracking-wider">
-                  Claude Structured Output
+                <span className="text-xs font-bold uppercase text-emerald-400 tracking-wider">
+                  Gemini AI Structured Output
                 </span>
                 <span className="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded font-mono">
                   Confidence: {structuredPreview.confidence || '0.94'}
@@ -334,28 +342,28 @@ export default function IncidentReportPage() {
               </div>
 
               <div className="space-y-3 text-xs">
-                <div className="p-3 rounded-xl bg-surface border border-surface-border">
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
                   <span className="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">
                     Extracted Location
                   </span>
                   <span className="text-white font-semibold">{structuredPreview.location}</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-surface border border-surface-border">
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
                   <span className="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">
                     Person / Entity Type Involved
                   </span>
                   <span className="text-white font-semibold">{structuredPreview.person_type_involved}</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-surface border border-surface-border">
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
                   <span className="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">
                     Structured Summary
                   </span>
                   <span className="text-slate-300">{structuredPreview.description}</span>
                 </div>
 
-                <div className="flex items-center justify-between p-3 rounded-xl bg-surface border border-surface-border">
+                <div className="flex items-center justify-between p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase font-bold block">Assessed Severity</span>
                     <span className="text-amber-400 font-bold">{structuredPreview.severity || 'Moderate'}</span>
@@ -365,13 +373,13 @@ export default function IncidentReportPage() {
 
                 {/* Attached RideSafe Evidence Display */}
                 {structuredPreview.linked_evidence && structuredPreview.linked_evidence.length > 0 && (
-                  <div className="p-3 rounded-xl bg-indigo-950/30 border border-indigo-500/40 space-y-2">
+                  <div className="p-3.5 rounded-xl bg-indigo-950/30 border border-indigo-500/40 space-y-2">
                     <span className="text-[10px] uppercase font-bold text-indigo-300 block flex items-center space-x-1.5">
                       <Camera className="w-3.5 h-3.5 text-indigo-400" />
                       <span>Linked RideSafe Evidence ({structuredPreview.linked_evidence.length} Record)</span>
                     </span>
                     {structuredPreview.linked_evidence.map((ev, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-surface border border-white/5 text-xs">
+                      <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-white/[0.03] border border-white/5 text-xs">
                         <div>
                           <span className="font-mono font-bold text-white block">
                             {ev.tourist_confirmed_plate || ev.ocr_detected_plate}
@@ -402,7 +410,7 @@ export default function IncidentReportPage() {
                 <button
                   id="btn-submit-incident-final"
                   onClick={handleFinalSubmit}
-                  className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/30 transition-all"
+                  className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl text-xs flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/30 transition-all hover:scale-102"
                 >
                   <Send className="w-4 h-4" />
                   <span>Queue for Human Administrator Review</span>
@@ -411,12 +419,12 @@ export default function IncidentReportPage() {
             </div>
           ) : (
             <div className="glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center h-full min-h-[350px]">
-              <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-slate-500 mb-4">
-                <Sparkles className="w-8 h-8 text-indigo-400/50" />
+              <div className="w-16 h-16 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-indigo-400 mb-4 shadow-inner">
+                <Sparkles className="w-8 h-8" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Structured Incident Schema</h3>
-              <p className="text-xs text-slate-400 max-w-sm">
-                Click "Run Claude Auto-Structuring" to convert your free-text report into structured metadata for official resolution.
+              <h3 className="text-lg font-bold text-white mb-2 font-display">Structured Incident Schema</h3>
+              <p className="text-xs text-slate-400 max-w-sm leading-relaxed">
+                Click "Run Gemini AI Auto-Structuring" to convert your free-text report into structured metadata for official resolution.
               </p>
             </div>
           )}

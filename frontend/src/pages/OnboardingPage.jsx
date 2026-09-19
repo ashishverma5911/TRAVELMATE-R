@@ -1,299 +1,503 @@
 import React, { useState } from 'react';
-import { ShieldCheck, QrCode, User, Globe, Phone, Clock, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import {
+  Compass,
+  Calendar,
+  Layers,
+  Navigation,
+  Globe,
+  Calculator,
+  ShieldCheck,
+  QrCode,
+  MapPin,
+  Clock,
+  ArrowRight,
+  CheckCircle2,
+  AlertTriangle,
+  Sparkles,
+  Camera,
+  ExternalLink,
+  ChevronRight,
+  ShieldAlert,
+  PhoneCall,
+  UserCheck
+} from 'lucide-react';
 import { useTraveler } from '../context/TravelerContext';
-import { api } from '../services/api';
+import { useJourneyChain } from '../context/JourneyChainContext';
+import { Link, useNavigate } from 'react-router-dom';
 import StatusBadge from '../components/common/StatusBadge';
-import { useNavigate } from 'react-router-dom';
-
-const NATIONALITIES = [
-  'United Kingdom', 'United States', 'Germany', 'France',
-  'Australia', 'Japan', 'Spain', 'Canada', 'Italy', 'Other'
-];
-
-const LANGUAGES = [
-  { code: 'en', label: 'English' },
-  { code: 'hi', label: 'हिन्दी (Hindi)' },
-  { code: 'fr', label: 'Français' },
-  { code: 'de', label: 'Deutsch' },
-  { code: 'es', label: 'Español' },
-  { code: 'ja', label: '日本語' }
-];
+import QRModal from '../components/common/QRModal';
 
 export default function OnboardingPage() {
-  const { traveler, journey, updateProfile } = useTraveler();
+  const { traveler } = useTraveler();
+  const { activeJourney, updateJourneyStage } = useJourneyChain();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    name: traveler?.name || '',
-    nationality: traveler?.nationality || 'United Kingdom',
-    preferred_language: traveler?.preferred_language || 'en',
-    emergency_contact: traveler?.emergency_contact || ''
-  });
+  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
 
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [activePass, setActivePass] = useState(journey ? {
-    journey_code: journey.journey_code,
-    expires_at: journey.expires_at,
-    status_label: 'Official Temporary Pass'
-  } : null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.name.trim()) return;
-
-    setIsGenerating(true);
-    try {
-      const res = await api.onboardTraveler(formData);
-      if (res.success) {
-        updateProfile(res.data.traveler, res.data.journey);
-        setActivePass(res.data.safe_pass);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsGenerating(false);
+  // Dedicated Feature Sections requested by user: Trip Planner, Fair Fare Intelligence, Bhashini Translator, Safe Route, Ride Safe Vault
+  const featureSections = [
+    {
+      id: 'section-trip-planner',
+      to: '/planner',
+      title: 'Trip Planner',
+      tagline: 'Itinerary Planning & Day-Wise Route Optimization',
+      desc: 'Build curated 1 to 3 day custom travel plans with timings, verified operating schedules, and integrated transport routes.',
+      icon: Calendar,
+      color: 'from-indigo-500/20 to-purple-500/20',
+      border: 'hover:border-indigo-500/50 border-indigo-500/20',
+      iconColor: 'text-indigo-400',
+      badge: 'Interactive Planner',
+      cta: 'Open Trip Planner'
+    },
+    {
+      id: 'section-fair-fare',
+      to: '/fare-meter',
+      title: 'Fair Fare Intelligence',
+      tagline: 'Official Auto, Taxi & Cab Tariff Verification',
+      desc: 'Calculate exact government-regulated rates for auto rickshaws and taxis. Protect against overcharging with reference price calculators.',
+      icon: Calculator,
+      color: 'from-amber-500/20 to-orange-500/20',
+      border: 'hover:border-amber-500/50 border-amber-500/20',
+      iconColor: 'text-amber-400',
+      badge: 'Gazette Tariffs',
+      cta: 'Calculate Fair Fare'
+    },
+    {
+      id: 'section-bhashini-translator',
+      to: '/bhashini-translator',
+      title: 'Bhashini Translator',
+      tagline: 'AI Speech-to-Speech & Multi-Lingual Driver Chat',
+      desc: 'Real-time conversational voice translation for 29+ languages. Overcome language barriers with auto drivers, shopkeepers, and local police.',
+      icon: Globe,
+      color: 'from-blue-500/20 to-indigo-500/20',
+      border: 'hover:border-blue-500/50 border-blue-500/20',
+      iconColor: 'text-blue-400',
+      badge: 'Voice AI 29+ Langs',
+      cta: 'Launch Translator'
+    },
+    {
+      id: 'section-safe-route',
+      to: '/safe-journey',
+      title: 'Safe Route',
+      tagline: 'Live GPS Journey Tracking & Corridor Deviations',
+      desc: 'Monitor your ride in real-time along pre-verified safety corridors with instant alerts for route deviations and night travel protection.',
+      icon: Navigation,
+      color: 'from-cyan-500/20 to-emerald-500/20',
+      border: 'hover:border-cyan-500/50 border-cyan-500/20',
+      iconColor: 'text-cyan-400',
+      badge: 'GPS Monitored',
+      cta: 'Track Safe Route'
+    },
+    {
+      id: 'section-ride-safe-vault',
+      to: '/vault',
+      title: 'Ride Safe Vault',
+      tagline: 'Vehicle Plate OCR, Meter Photo & Evidence Logging',
+      desc: 'Capture and confirm taxi/auto vehicle license plates before boarding. Encrypted local evidence locker accessible even offline.',
+      icon: Camera,
+      color: 'from-purple-500/20 to-pink-500/20',
+      border: 'hover:border-purple-500/50 border-purple-500/20',
+      iconColor: 'text-purple-400',
+      badge: 'Plate Logger',
+      cta: 'Open Safe Vault'
     }
-  };
+  ];
+
+  // 4-Stage Travel Process
+  const fourStages = [
+    {
+      key: 'DISCOVER',
+      step: 'Stage 1',
+      title: 'Discover',
+      desc: 'Verified attractions, opening hours, nearest metro & ASI ticket rates.',
+      to: '/discover',
+      status: 'Verified Destinations'
+    },
+    {
+      key: 'PREPARE',
+      step: 'Stage 2',
+      title: 'Prepare',
+      desc: 'Build customized daily itineraries and check gazette auto/cab tariffs.',
+      to: '/planner',
+      status: 'Itinerary & Fares'
+    },
+    {
+      key: 'TRAVEL',
+      step: 'Stage 3',
+      title: 'Travel',
+      desc: 'Live transit tracking, Bhashini driver translation, and plate logger.',
+      to: '/safe-journey',
+      status: 'Live On Route'
+    },
+    {
+      key: 'RESOLVE',
+      step: 'Stage 4',
+      title: 'Resolve',
+      desc: 'Instant 112 emergency calls and structured Tourist Police assistance.',
+      to: '/incident',
+      status: '24/7 Police Support'
+    }
+  ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* Hero Banner */}
-      <div className="relative rounded-3xl p-8 overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 border border-white/10 shadow-2xl mb-8">
-        <div className="absolute -right-12 -top-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-4">
-            <ShieldCheck className="w-4 h-4" />
-            <span>SIH 2026 • Verified Tourist Trust Architecture</span>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8 animate-in fade-in duration-300">
+      {/* 1. COMMAND CENTER HERO BANNER */}
+      <div className="relative rounded-3xl p-6 sm:p-8 overflow-hidden glass-panel border border-surface-border">
+        <div className="absolute -right-16 -top-16 w-80 h-80 bg-gradient-to-br from-emerald-500/10 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div className="max-w-2xl space-y-3">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>SIH 2026 • Verified Tourist Trust & Safety Platform</span>
+            </div>
+
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-display text-white tracking-tight leading-tight">
+              Welcome to Delhi, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">{traveler?.name || 'Traveler'}</span>
+            </h1>
+
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
+              Your interconnected journey command center. Access verified monument guidelines, official transport tariffs, real-time safety monitoring, and voice translation without passport uploads.
+            </p>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight leading-tight">
-            One Tourist. One Journey ID. <span className="text-gradient-emerald">Total Delhi Safety.</span>
-          </h1>
-          <p className="mt-3 text-sm sm:text-base text-slate-300 leading-relaxed">
-            TravelMate replaces 12 fragmented apps with an interconnected journey layer.
-            Zero passport upload, auto-expiring QR identity, verified monument access, and fair fare protection.
-          </p>
+
+          {/* Active Journey Status Box */}
+          <div className="p-4 sm:p-5 rounded-2xl glass-card border border-emerald-500/30 backdrop-blur-xl lg:w-80 shrink-0 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Active Journey Chain
+              </span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                Live & Secure
+              </span>
+            </div>
+
+            <div>
+              <div className="font-mono text-sm sm:text-base font-bold text-white flex items-center space-x-2">
+                <span>{activeJourney.id}</span>
+              </div>
+              <div className="text-xs text-slate-300 mt-1 flex items-center space-x-1.5">
+                <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span className="truncate">{activeJourney.currentLocation || 'Connaught Place & Central Corridor'}</span>
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
+              <button
+                onClick={() => setIsQRModalOpen(true)}
+                className="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1 transition-colors"
+              >
+                <QrCode className="w-3.5 h-3.5" />
+                <span>Show SafePass</span>
+              </button>
+              <Link
+                to="/my-journey"
+                className="text-slate-300 hover:text-white font-medium flex items-center space-x-1 transition-colors"
+              >
+                <span>Timeline</span>
+                <ChevronRight className="w-3 h-3 text-slate-400" />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Onboarding Form */}
-        <div className="lg:col-span-6 glass-card p-6 sm:p-8 rounded-2xl">
-          <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
+      {/* 2. "WHERE AM I IN MY JOURNEY?" ACTIVE SUMMARY CARD */}
+      <div className="glass-card rounded-3xl p-6 sm:p-7 border border-surface-border relative overflow-hidden">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/10">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">
+              Where Am I In My Journey?
+            </span>
+            <h2 className="text-lg sm:text-xl font-bold font-display text-white mt-0.5">
+              {activeJourney.title}
+            </h2>
+            <div className="flex flex-wrap items-center gap-3 mt-1.5 text-xs text-slate-400">
+              <span className="flex items-center space-x-1">
+                <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{activeJourney.destination}</span>
+              </span>
+              <span>•</span>
+              <span className="flex items-center space-x-1">
+                <Clock className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Stage: <strong className="text-white font-semibold">{activeJourney.stage}</strong></span>
+              </span>
+              <span>•</span>
+              <span className="text-emerald-400 font-semibold">
+                ✓ Safety Score: {activeJourney.safetyScore || 98}% Verified
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Link
+              to="/my-journey"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-semibold flex items-center space-x-1.5 shadow-lg shadow-emerald-600/25 transition-all"
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Full Journey Chain</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* 4-Stage Travel Roadmap */}
+        <div className="pt-4 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              Travel Roadmap Progress
+            </span>
+            <span className="text-[11px] text-emerald-400 font-medium">
+              Click any stage to jump into that workflow
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+            {fourStages.map((st, i) => {
+              const isCurrent = activeJourney.stage === st.key;
+              const isPassed = ['DISCOVER', 'PREPARE', 'TRAVEL', 'RESOLVE'].indexOf(activeJourney.stage) >= i;
+              return (
+                <div
+                  key={st.key}
+                  onClick={() => {
+                    updateJourneyStage(st.key);
+                    navigate(st.to);
+                  }}
+                  className={`p-4 rounded-2xl border text-left cursor-pointer transition-all duration-200 ${
+                    isCurrent
+                      ? 'bg-emerald-500/20 border-emerald-500/50 text-white shadow-lg shadow-emerald-500/10'
+                      : isPassed
+                      ? 'bg-white/[0.04] border-white/15 text-slate-300 hover:border-emerald-500/40 hover:bg-white/[0.07]'
+                      : 'bg-white/[0.02] border-white/5 text-slate-500 hover:text-slate-400 hover:border-white/10'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-xs font-bold mb-1">
+                    <span className="text-[10px] text-slate-400 uppercase tracking-wider">{st.step}</span>
+                    {isPassed && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
+                  </div>
+                  <h3 className="text-sm font-bold text-white">{st.title}</h3>
+                  <p className="text-[11px] text-slate-400 mt-1 line-clamp-2 leading-relaxed">{st.desc}</p>
+                  <div className="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between text-[11px] text-emerald-400 font-semibold">
+                    <span>{st.status}</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* 3. DEDICATED SECTIONS: TRIP PLANNER, FAIR FARE INTELLIGENCE, BHASHINI TRANSLATOR, SAFE ROUTE, RIDE SAFE VAULT */}
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 className="text-xl font-bold font-display text-white flex items-center space-x-2">
+              <span>Core Application Sections</span>
+            </h2>
+            <p className="text-xs text-slate-400">Individual specialized modules built for safe and seamless travel</p>
+          </div>
+          <span className="text-xs text-slate-500 hidden sm:inline">5 Independent Workspaces</span>
+        </div>
+
+        {/* 5 Distinct Dedicated Sections */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {featureSections.map((sec, idx) => {
+            const Icon = sec.icon;
+            return (
+              <div
+                key={sec.id}
+                id={sec.id}
+                className={`glass-card p-6 rounded-2xl border transition-all duration-200 flex flex-col justify-between ${sec.border} relative overflow-hidden group hover:-translate-y-1 shadow-lg`}
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-tr ${sec.color} flex items-center justify-center border border-white/10 group-hover:scale-105 transition-transform shadow-md`}>
+                      <Icon className={`w-5 h-5 ${sec.iconColor}`} />
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-white/[0.08] text-slate-200 border border-white/10 uppercase tracking-wider">
+                      {sec.badge}
+                    </span>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider mb-1">
+                      Section 0{idx + 1}
+                    </div>
+                    <h3 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors">
+                      {sec.title}
+                    </h3>
+                    <p className="text-xs font-medium text-slate-300 mt-1">
+                      {sec.tagline}
+                    </p>
+                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                      {sec.desc}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-5 mt-5 border-t border-white/10">
+                  <Link
+                    to={sec.to}
+                    id={`btn-open-${sec.id}`}
+                    className="w-full py-2.5 px-4 rounded-xl bg-white/[0.07] hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/40 text-white font-semibold text-xs transition-all flex items-center justify-between group-hover:shadow-md"
+                  >
+                    <span>{sec.cta}</span>
+                    <ArrowRight className="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 4. RECENT ACTIVITY & DIGITAL SAFEPASS PREVIEW */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Recent Journey Activity */}
+        <div className="lg:col-span-7 glass-card p-6 sm:p-7 rounded-3xl border border-surface-border space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-white/10">
             <div>
-              <h2 className="text-xl font-bold font-display text-white">Passport-Free Minimal Profile</h2>
-              <p className="text-xs text-slate-400">Generate your temporary 7-day SafeVisit Pass</p>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+                Recent Journey Activity
+              </h3>
+              <p className="text-[11px] text-slate-400">Auto-recorded under ID: {activeJourney.id}</p>
+            </div>
+            <Link to="/my-journey" className="text-xs text-emerald-400 hover:underline font-semibold flex items-center space-x-1">
+              <span>View All ({activeJourney.timeline?.length || 0})</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="space-y-3">
+            {activeJourney.timeline?.slice(0, 4).map((evt, idx) => (
+              <div
+                key={evt.id || idx}
+                className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-start justify-between gap-3 text-xs hover:border-emerald-500/30 transition-colors"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/5 text-slate-400">
+                      {evt.module}
+                    </span>
+                    <span className="font-bold text-white">{evt.title}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    {evt.description}
+                  </p>
+                </div>
+                <div className="text-right shrink-0">
+                  <span className="text-[10px] text-slate-500 block">
+                    {new Date(evt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                  {evt.actionPath && (
+                    <Link
+                      to={evt.actionPath}
+                      className="text-[11px] text-emerald-400 font-semibold hover:underline inline-block mt-1"
+                    >
+                      Open →
+                    </Link>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Digital SafePass Credential Card */}
+        <div className="lg:col-span-5 glass-card p-6 sm:p-7 rounded-3xl border border-emerald-500/30 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <QrCode className="w-5 h-5 text-emerald-400" />
+              <span className="text-xs font-bold uppercase tracking-wider text-white">
+                SafeVisit Digital Pass
+              </span>
             </div>
             <StatusBadge status="Official" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
-                Full Name / Traveler Handle
-              </label>
-              <div className="relative">
-                <User className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                <input
-                  type="text"
-                  required
-                  id="input-traveler-name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g. Sarah Jenkins"
-                  className="w-full pl-10 pr-4 py-2.5 bg-surface/80 border border-surface-border rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
-                  Nationality
-                </label>
-                <div className="relative">
-                  <Globe className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                  <select
-                    id="select-traveler-nationality"
-                    value={formData.nationality}
-                    onChange={(e) => setFormData({ ...formData, nationality: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2.5 bg-surface/80 border border-surface-border rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500"
-                  >
-                    {NATIONALITIES.map((n) => (
-                      <option key={n} value={n} className="bg-surface text-white">
-                        {n}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
-                  Preferred Language
-                </label>
-                <select
-                  id="select-traveler-language"
-                  value={formData.preferred_language}
-                  onChange={(e) => setFormData({ ...formData, preferred_language: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-surface/80 border border-surface-border rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500"
-                >
-                  {LANGUAGES.map((l) => (
-                    <option key={l.code} value={l.code} className="bg-surface text-white">
-                      {l.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
-                Emergency Contact (Optional WhatsApp / Phone)
-              </label>
-              <div className="relative">
-                <Phone className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                <input
-                  type="tel"
-                  id="input-traveler-emergency"
-                  value={formData.emergency_contact}
-                  onChange={(e) => setFormData({ ...formData, emergency_contact: e.target.value })}
-                  placeholder="+44 7700 900077"
-                  className="w-full pl-10 pr-4 py-2.5 bg-surface/80 border border-surface-border rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-              <p className="text-[11px] text-slate-400 mt-1">
-                Will be automatically alerted with GPS pin if SOS or silent gesture is triggered.
-              </p>
-            </div>
-
-            <div className="pt-2">
-              <button
-                type="submit"
-                id="btn-generate-safe-pass"
-                disabled={isGenerating}
-                className="w-full py-3 px-6 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold rounded-xl text-sm flex items-center justify-center space-x-2 shadow-lg shadow-emerald-500/25 transition-all duration-200 active:scale-[0.98]"
-              >
-                {isGenerating ? (
-                  <span>Generating Crypto Pass...</span>
-                ) : (
-                  <>
-                    <Sparkles className="w-4 h-4" />
-                    <span>Issue SafeVisit Pass (Journey ID)</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
-
-          {/* Privacy Guarantee Box */}
-          <div className="mt-6 p-4 rounded-xl bg-surface border border-surface-border text-xs text-slate-400 space-y-1.5">
-            <div className="flex items-center text-emerald-400 font-semibold">
-              <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />
-              <span>Zero Document Storage Architecture</span>
-            </div>
-            <p>
-              TravelMate stores NO passport scans, NO national ID numbers, and NO biometric records.
-              All data expires automatically after your 7-day Delhi visit.
-            </p>
-          </div>
-        </div>
-
-        {/* Active SafeVisit Pass Card */}
-        <div className="lg:col-span-6 flex flex-col justify-between">
-          <div className="glass-card p-6 sm:p-8 rounded-3xl border border-emerald-500/30 relative overflow-hidden bg-gradient-to-b from-surface via-surface-card to-slate-900">
-            {/* Stamp Ribbon */}
-            <div className="absolute -right-12 top-6 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[10px] font-black uppercase tracking-widest py-1 px-12 rotate-45 shadow-md">
-              VALID DELHI PASS
-            </div>
-
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                <QrCode className="w-7 h-7" />
-              </div>
-              <div>
-                <span className="text-[11px] uppercase tracking-widest text-emerald-400 font-bold">
-                  Official SafeVisit Pass
-                </span>
-                <h3 className="text-xl font-bold font-mono text-white">
-                  {activePass?.journey_code || journey?.journey_code || 'TM-DEL-2026-X89K'}
-                </h3>
-              </div>
-            </div>
-
-            {/* Pass QR Visual */}
-            <div className="my-6 flex flex-col items-center justify-center p-6 rounded-2xl bg-white/5 border border-white/10">
-              <div className="p-4 bg-white rounded-2xl shadow-xl">
-                {/* Clean QR placeholder SVG */}
-                <svg className="w-40 h-40" viewBox="0 0 100 100" fill="none">
-                  <rect width="100" height="100" fill="white" />
-                  {/* Outer corner markers */}
-                  <rect x="10" y="10" width="26" height="26" fill="#090E17" rx="4" />
-                  <rect x="14" y="14" width="18" height="18" fill="white" rx="2" />
-                  <rect x="18" y="18" width="10" height="10" fill="#10B981" rx="1" />
-
-                  <rect x="64" y="10" width="26" height="26" fill="#090E17" rx="4" />
-                  <rect x="68" y="14" width="18" height="18" fill="white" rx="2" />
-                  <rect x="72" y="18" width="10" height="10" fill="#10B981" rx="1" />
-
-                  <rect x="10" y="64" width="26" height="26" fill="#090E17" rx="4" />
-                  <rect x="14" y="68" width="18" height="18" fill="white" rx="2" />
-                  <rect x="18" y="72" width="10" height="10" fill="#10B981" rx="1" />
-
-                  {/* QR Data Pattern */}
-                  <rect x="42" y="14" width="6" height="6" fill="#090E17" />
-                  <rect x="52" y="14" width="6" height="6" fill="#090E17" />
-                  <rect x="42" y="24" width="6" height="6" fill="#090E17" />
-                  <rect x="42" y="42" width="16" height="16" fill="#090E17" rx="2" />
-                  <rect x="14" y="46" width="6" height="6" fill="#090E17" />
-                  <rect x="24" y="46" width="6" height="6" fill="#090E17" />
-                  <rect x="68" y="46" width="6" height="6" fill="#090E17" />
-                  <rect x="78" y="56" width="6" height="6" fill="#090E17" />
-                  <rect x="46" y="68" width="6" height="6" fill="#090E17" />
-                  <rect x="56" y="78" width="6" height="6" fill="#090E17" />
-                  <rect x="74" y="74" width="12" height="12" fill="#10B981" rx="2" />
-                </svg>
-              </div>
-              <p className="text-[11px] font-mono text-slate-400 mt-3 text-center">
-                Scan at ASI Monument Counters / Delhi Tourist Police Checkpoints
-              </p>
-            </div>
-
-            {/* Metadata Badges */}
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-surface border border-surface-border">
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 block mb-1">
-                  Pass Holder
-                </span>
-                <p className="font-bold text-white truncate">{formData.name || 'Sarah Jenkins'}</p>
-                <p className="text-[11px] text-emerald-400 font-medium">{formData.nationality}</p>
-              </div>
-              <div className="p-3 rounded-xl bg-surface border border-surface-border">
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 block mb-1">
-                  Validity Window
-                </span>
-                <div className="flex items-center text-amber-400 font-bold space-x-1">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>7 Days Auto-Expiry</span>
-                </div>
-                <p className="text-[11px] text-slate-400">Zero persistent retention</p>
-              </div>
-            </div>
-
-            {/* Quick Next Step */}
-            <div className="mt-6 flex items-center justify-between pt-4 border-t border-white/10">
-              <span className="text-xs text-slate-400">Ready to explore Delhi?</span>
-              <button
-                id="btn-start-exploring"
-                onClick={() => navigate('/discover')}
-                className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all"
-              >
-                <span>View 10 Verified Places</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+          <div className="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+            {/* Clean QR Visual */}
+            <div
+              onClick={() => setIsQRModalOpen(true)}
+              className="p-3 bg-white rounded-xl shadow-lg cursor-pointer hover:scale-105 transition-transform"
+              title="Click to view full screen QR"
+            >
+              <svg className="w-28 h-28" viewBox="0 0 100 100" fill="none">
+                <rect width="100" height="100" fill="white" />
+                <rect x="10" y="10" width="24" height="24" fill="#090E17" rx="3" />
+                <rect x="14" y="14" width="16" height="16" fill="white" rx="2" />
+                <rect x="18" y="18" width="8" height="8" fill="#10B981" rx="1" />
+                <rect x="66" y="10" width="24" height="24" fill="#090E17" rx="3" />
+                <rect x="70" y="14" width="16" height="16" fill="white" rx="2" />
+                <rect x="74" y="18" width="8" height="8" fill="#10B981" rx="1" />
+                <rect x="10" y="66" width="24" height="24" fill="#090E17" rx="3" />
+                <rect x="14" y="70" width="16" height="16" fill="white" rx="2" />
+                <rect x="18" y="74" width="8" height="8" fill="#10B981" rx="1" />
+                <rect x="42" y="14" width="6" height="6" fill="#090E17" />
+                <rect x="52" y="24" width="6" height="6" fill="#090E17" />
+                <rect x="42" y="42" width="16" height="16" fill="#090E17" rx="2" />
+                <rect x="66" y="46" width="6" height="6" fill="#090E17" />
+                <rect x="46" y="68" width="6" height="6" fill="#090E17" />
+                <rect x="74" y="74" width="12" height="12" fill="#10B981" rx="2" />
+              </svg>
             </div>
           </div>
+
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="p-2.5 rounded-lg bg-surface border border-surface-border">
+              <span className="text-[10px] uppercase text-slate-400 block">Pass Holder</span>
+              <span className="font-bold text-white truncate block">{traveler?.name || 'Sarah Jenkins'}</span>
+              <span className="text-[10px] text-emerald-400">{traveler?.nationality || 'United Kingdom'}</span>
+            </div>
+            <div className="p-2.5 rounded-lg bg-surface border border-surface-border">
+              <span className="text-[10px] uppercase text-slate-400 block">Validity</span>
+              <span className="font-bold text-amber-400 block">7-Day Window</span>
+              <span className="text-[10px] text-slate-400">Zero-Doc Privacy</span>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setIsQRModalOpen(true)}
+            id="btn-dashboard-expand-qr"
+            className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-600/25 transition-all flex items-center justify-center space-x-2"
+          >
+            <QrCode className="w-3.5 h-3.5" />
+            <span>Open Verified QR Ticket</span>
+          </button>
         </div>
       </div>
+
+      {/* 5. IMPORTANT TRAVEL INFO & 24/7 HELPLINE TICKER */}
+      <div className="glass-card rounded-2xl p-4 sm:p-5 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+            <PhoneCall className="w-4 h-4" />
+          </div>
+          <div>
+            <div className="font-bold text-white">Delhi Tourist Police Helpline: 8750871111</div>
+            <div className="text-[11px] text-slate-400">
+              For auto fare disputes, tout assistance, or directions. Police emergency: Dial 112.
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-2 shrink-0">
+          <a
+            href="tel:8750871111"
+            className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors"
+          >
+            Call Tourist Police
+          </a>
+          <Link
+            to="/user-portal"
+            className="px-3.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-medium border border-white/10 transition-colors"
+          >
+            All Embassies
+          </Link>
+        </div>
+      </div>
+
+      {/* QR Modal */}
+      <QRModal isOpen={isQRModalOpen} onClose={() => setIsQRModalOpen(false)} />
     </div>
   );
 }

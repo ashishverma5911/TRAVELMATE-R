@@ -389,7 +389,7 @@ let supabase = null;
 let isPostgresConnected = false;
 
 // Initialize Supabase Client if URL and Key exist
-if (config.SUPABASE_URL && (config.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)) {
+if (config.SUPABASE_URL && !config.SUPABASE_URL.includes('your-project-id') && !config.SUPABASE_URL.includes('YOUR_') && (config.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)) {
   try {
     supabase = createClient(
       config.SUPABASE_URL,
@@ -408,7 +408,7 @@ if (config.SUPABASE_URL && (config.SUPABASE_ANON_KEY || process.env.SUPABASE_SER
 async function initDatabase() {
   const dbUrl = config.DATABASE_URL || process.env.DATABASE_URL;
 
-  if (!dbUrl || dbUrl.trim() === '' || dbUrl.includes('YOUR_') || dbUrl.includes('...')) {
+  if (!dbUrl || dbUrl.trim() === '' || dbUrl.includes('YOUR_') || dbUrl.includes('...') || dbUrl.includes('yourprojectref') || dbUrl.includes('yourpassword')) {
     console.log('=======================================================');
     console.log('[Database] ℹ️  DATABASE_URL is not configured in backend/.env.');
     console.log('[Database] 🛡️  Running with resilient in-memory local data store.');
@@ -423,7 +423,7 @@ async function initDatabase() {
     pool = new Pool({
       connectionString: dbUrl,
       ssl: { rejectUnauthorized: false },
-      connectionTimeoutMillis: 8000
+      connectionTimeoutMillis: 1500
     });
 
     const client = await pool.connect();

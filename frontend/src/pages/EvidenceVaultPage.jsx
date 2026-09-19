@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Camera, ShieldCheck, CheckCircle2, AlertTriangle, Lock, Eye, Trash2, Car, Upload } from 'lucide-react';
 import { useTraveler } from '../context/TravelerContext';
+import { useJourneyChain } from '../context/JourneyChainContext';
 import { api } from '../services/api';
 import StatusBadge from '../components/common/StatusBadge';
 
 export default function EvidenceVaultPage() {
   const { journey } = useTraveler();
+  const { activeJourney, recordEvidence } = useJourneyChain();
 
   const [evidenceList, setEvidenceList] = useState([]);
   const [vehicleType, setVehicleType] = useState('auto');
@@ -56,8 +58,14 @@ export default function EvidenceVaultPage() {
 
       if (res.success) {
         setEvidenceList([res.data, ...evidenceList]);
+        recordEvidence({
+          plateNumber: confirmedPlateInput.trim(),
+          vehicleType: vehicleType === 'auto' ? 'Auto-Rickshaw' : 'Cab / Taxi',
+          photoUrl: ocrCandidate?.preview_url || 'sample-auto.jpg',
+          location: 'New Delhi Railway Station Exit'
+        });
         setOcrCandidate(null);
-        setSaveSuccessMsg(`Vehicle ${confirmedPlateInput} confirmed & securely saved in RideSafe Vault.`);
+        setSaveSuccessMsg(`Vehicle ${confirmedPlateInput} confirmed & securely saved to Journey Chain (${activeJourney.id}).`);
         setTimeout(() => setSaveSuccessMsg(''), 4000);
       }
     } catch (e) {
@@ -66,26 +74,26 @@ export default function EvidenceVaultPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
         <div>
-          <div className="inline-flex items-center space-x-2 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-1">
-            <Lock className="w-4 h-4" />
-            <span>Private Pre-Transit Verification Layer</span>
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-semibold mb-2">
+            <Lock className="w-3.5 h-3.5 text-indigo-400" />
+            <span>Vehicle Verification & Safety Vault</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white">
-            RideSafe Evidence Vault & Plate OCR
+          <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
+            Record Vehicle Plate & Ride Details
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Log your auto or taxi before boarding. Stored privately with mandatory human confirmation.
+          <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl leading-relaxed">
+            Take a photo of your auto-rickshaw or taxi plate before boarding. Automatically links vehicle credentials to your Journey Chain without transmitting private records to commercial ad networks.
           </p>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2.5">
           <StatusBadge status="Official" />
-          <span className="text-xs text-slate-400 font-mono">
-            Linked to: {journey?.journey_code}
+          <span className="text-xs text-emerald-400 font-mono font-bold px-3 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/30">
+            Chain: {activeJourney.id}
           </span>
         </div>
       </div>
@@ -102,8 +110,8 @@ export default function EvidenceVaultPage() {
           </p>
 
           {/* Vehicle Type Picker */}
-          <div className="mb-4">
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">Vehicle Type</label>
+          <div className="mb-5">
+            <label className="block text-xs font-semibold text-slate-300 mb-2">Vehicle Type</label>
             <div className="grid grid-cols-3 gap-2">
               {[
                 { id: 'auto', label: 'Auto-Rickshaw' },
@@ -116,8 +124,8 @@ export default function EvidenceVaultPage() {
                   onClick={() => setVehicleType(v.id)}
                   className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
                     vehicleType === v.id
-                      ? 'bg-indigo-600/30 border-indigo-500 text-indigo-300'
-                      : 'bg-surface border-surface-border text-slate-400 hover:text-white'
+                      ? 'bg-indigo-600/30 border-indigo-500/60 text-indigo-300 shadow-md shadow-indigo-600/15'
+                      : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:bg-white/[0.06]'
                   }`}
                 >
                   {v.label}
@@ -127,8 +135,8 @@ export default function EvidenceVaultPage() {
           </div>
 
           {/* Capture Trigger Buttons */}
-          <div className="p-6 rounded-2xl bg-surface border border-dashed border-white/20 text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto">
+          <div className="p-6 rounded-2xl bg-white/[0.02] border border-dashed border-white/20 text-center space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mx-auto shadow-inner">
               <Camera className="w-6 h-6" />
             </div>
             <div>
@@ -149,9 +157,9 @@ export default function EvidenceVaultPage() {
           </div>
 
           {/* Mandatory Confirmation Step Notice (Scope #9 Rule) */}
-          <div className="mt-4 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-300 flex items-start space-x-2">
+          <div className="mt-5 p-4 rounded-xl bg-amber-500/10 border border-amber-500/25 text-[11px] text-amber-300/90 flex items-start space-x-2.5">
             <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-            <p>
+            <p className="leading-relaxed">
               <strong>Security Protocol:</strong> To prevent false accusations or OCR distortion,
               the tourist must inspect and confirm the plate characters before it is written to the vault.
             </p>
@@ -226,10 +234,10 @@ export default function EvidenceVaultPage() {
                 {evidenceList.map((item) => (
                   <div
                     key={item.id}
-                    className="p-3.5 rounded-2xl bg-surface border border-surface-border flex items-center justify-between"
+                    className="p-3.5 rounded-2xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.08] transition-all flex items-center justify-between"
                   >
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-300">
+                      <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-indigo-300">
                         <Car className="w-5 h-5" />
                       </div>
                       <div>
@@ -237,7 +245,7 @@ export default function EvidenceVaultPage() {
                           <span className="font-mono font-bold text-sm text-white">
                             {item.tourist_confirmed_plate}
                           </span>
-                          <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
                             Confirmed
                           </span>
                         </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, MapPin, Ticket, ExternalLink, ShieldCheck, Clock, Users, AlertTriangle, Star, CheckCircle, LayoutGrid, Compass, Sun, Camera } from 'lucide-react';
 import { api, API_BASE } from '../services/api';
 import { useTraveler } from '../context/TravelerContext';
+import { useJourneyChain } from '../context/JourneyChainContext';
 import StatusBadge from '../components/common/StatusBadge';
 import GoogleMapView from '../components/maps/GoogleMapView';
 
@@ -10,6 +11,7 @@ const DEFAULT_PLACE_IMAGE = '/places/red-fort.jpg';
 
 export default function DiscoverPage() {
   const { journey } = useTraveler();
+  const { activeJourney, recordPlaceVisit } = useJourneyChain();
   const [places, setPlaces] = useState([]);
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,6 +47,9 @@ export default function DiscoverPage() {
       try {
         localStorage.setItem('tm_visited_places', JSON.stringify(updated));
       } catch (_) {}
+
+      // Record to active Journey Chain
+      recordPlaceVisit(place.name);
 
       // Increment in-app check-ins to dynamically update crowd estimation
       setPlaces(prev => prev.map(p => {
@@ -104,24 +109,24 @@ export default function DiscoverPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8 animate-in fade-in duration-300">
       {/* Header & Search */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
         <div>
-          <div className="inline-flex items-center space-x-2 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-1">
-            <ShieldCheck className="w-4 h-4" />
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>ASI & Delhi Tourism Verified Registry</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-display text-white tracking-tight">
             Verified Delhi Monuments & Cultural Sites
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Every entry fee, timing, and ticketing URL is officially authenticated to eliminate counterfeit charges.
+          <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+            Every entry fee, timing, and ticketing URL is officially authenticated by Archaeological Survey of India to eliminate counterfeit charges.
           </p>
         </div>
 
         {/* Search Bar */}
-        <div className="relative w-full md:w-80">
+        <div className="relative w-full md:w-80 shrink-0">
           <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
           <input
             type="text"
@@ -129,23 +134,23 @@ export default function DiscoverPage() {
             placeholder="Search Red Fort, Qutub, timings..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-surface-card border border-surface-border rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500"
+            className="w-full pl-10 pr-4 py-2.5 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500 focus:bg-white/[0.06] transition-all"
           />
         </div>
       </div>
 
       {/* View Mode Toggle & Category Filter */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center space-x-2 overflow-x-auto pb-2 no-scrollbar">
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
               id={`filter-${cat.toLowerCase().replace(/\s+/g, '-')}`}
               onClick={() => setActiveCategory(cat)}
-              className={`category-filter-pill px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+              className={`category-filter-pill px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
                 activeCategory === cat
-                  ? 'active bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                  : 'bg-surface-card text-slate-400 hover:text-white border border-surface-border'
+                  ? 'active bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 border border-emerald-400/40'
+                  : 'bg-white/[0.03] text-slate-400 hover:text-white border border-white/[0.08] hover:bg-white/[0.06]'
               }`}
             >
               {cat}
@@ -153,12 +158,12 @@ export default function DiscoverPage() {
           ))}
         </div>
 
-        <div className="view-mode-container flex items-center space-x-1 bg-surface-card p-1 rounded-xl border border-surface-border shrink-0 self-start sm:self-auto">
+        <div className="view-mode-container flex items-center space-x-1 bg-white/[0.03] p-1 rounded-xl border border-white/[0.08] shrink-0 self-start sm:self-auto">
           <button
             onClick={() => setViewMode('grid')}
-            className={`view-mode-btn flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`view-mode-btn flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
               viewMode === 'grid'
-                ? 'active bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                ? 'active bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -167,9 +172,9 @@ export default function DiscoverPage() {
           </button>
           <button
             onClick={() => setViewMode('map')}
-            className={`view-mode-btn flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`view-mode-btn flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
               viewMode === 'map'
-                ? 'active bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                ? 'active bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -181,7 +186,7 @@ export default function DiscoverPage() {
 
       {/* Map View Mode */}
       {viewMode === 'map' && (
-        <div className="mb-8">
+        <div className="mb-8 rounded-3xl overflow-hidden border border-white/[0.08] shadow-2xl">
           <GoogleMapView
             places={places}
             showRoute={false}
@@ -195,7 +200,7 @@ export default function DiscoverPage() {
         {places.map((place) => (
           <div
             key={place.id || place.place_key}
-            className="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between border border-surface-border group transition-all"
+            className="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group transition-all"
           >
             <div>
               {/* 1. Monument Photo Header */}

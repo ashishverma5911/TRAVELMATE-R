@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const incidentController = require('../controllers/incidentController');
 
-// POST /api/incidents - Report incident for Claude structuring & admin review
+// POST /api/incidents - Report incident for Gemini AI structuring & admin review
 router.post('/', incidentController.submitIncident);
 
 // GET /api/incidents/:id - Status of report

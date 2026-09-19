@@ -25,6 +25,7 @@ import {
   Calculator
 } from 'lucide-react';
 import { useTraveler } from '../context/TravelerContext';
+import { useJourneyChain } from '../context/JourneyChainContext';
 import StatusBadge from '../components/common/StatusBadge';
 import GoogleMapView from '../components/maps/GoogleMapView';
 import { resolveLocation, searchLocations } from '../services/mapResolver';
@@ -92,6 +93,7 @@ const INITIAL_CORRIDORS = [
 
 export default function SafeJourneyPage() {
   const { journey } = useTraveler();
+  const { activeJourney, addTimelineEvent } = useJourneyChain();
 
   const [activeTab, setActiveTab] = useState('tracking'); // 'tracking', 'zones', 'night'
   const [simulatedDeviation, setSimulatedDeviation] = useState(false);
@@ -355,24 +357,24 @@ export default function SafeJourneyPage() {
   const activeSelectedRoute = availableRoutes[selectedRouteIndex] || availableRoutes[0];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 py-8 space-y-8 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
         <div>
-          <div className="inline-flex items-center space-x-2 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-1">
-            <Compass className="w-4 h-4" />
-            <span>Google Maps Platform & Delhi Safety Overlay</span>
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-semibold mb-2">
+            <Compass className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Active Transit Tracking • Chain: {activeJourney.id}</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white">
-            Safe Journey & Multi-Route Safety Monitor
+          <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
+            Safe Journey: Active Transit & Route Tracking
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Real-time live GPS tracking, unbiased destination geocoding, and multi-corridor safety comparison with active police beat overlays.
+          <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+            Real-time live GPS tracking, route monitoring, and multi-corridor safety comparison. Auto-linked to your active Journey Chain.
           </p>
         </div>
 
         {/* Tab Controls */}
-        <div className="flex items-center space-x-2 bg-surface-card p-1 rounded-2xl border border-surface-border shrink-0">
+        <div className="flex items-center space-x-1.5 bg-white/[0.04] p-1.5 rounded-2xl border border-white/10 shrink-0 backdrop-blur-md">
           {[
             { id: 'tracking', label: 'Live Tracking' },
             { id: 'zones', label: 'Zone Safety Layer' },
@@ -382,10 +384,10 @@ export default function SafeJourneyPage() {
               key={tab.id}
               id={`tab-${tab.id}`}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                 activeTab === tab.id
-                  ? 'bg-cyan-500 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/25'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
               {tab.label}
@@ -395,7 +397,7 @@ export default function SafeJourneyPage() {
       </div>
 
       {/* Interactive Pickup & Destination Selector Bar */}
-      <div className="glass-card rounded-2xl p-4 sm:p-5 mb-6 border border-surface-border relative z-30">
+      <div className="glass-card rounded-3xl p-5 sm:p-6 border border-surface-border relative z-30">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-4 border-b border-white/10">
           
           {/* Pickup Location Box (Live GPS / Manual Entry Toggle) */}
@@ -860,10 +862,21 @@ export default function SafeJourneyPage() {
               </span>
             </div>
 
-            {/* Test Soft Deviation Button */}
+            {/* Test Soft Deviation Button (Clearly marked as Simulated transit tracking) */}
             <button
               id="btn-simulate-deviation"
-              onClick={() => setSimulatedDeviation(!simulatedDeviation)}
+              onClick={() => {
+                const next = !simulatedDeviation;
+                setSimulatedDeviation(next);
+                if (next) {
+                  addTimelineEvent({
+                    title: 'Simulated Transit Tracking: Route Deviation Test',
+                    module: 'Safe Journey',
+                    description: 'Simulated movement departed from monitored corridor by >500m to verify tourist safety advisory triggers.',
+                    actionPath: '/safe-journey'
+                  });
+                }
+              }}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${
                 simulatedDeviation
                   ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
@@ -871,7 +884,11 @@ export default function SafeJourneyPage() {
               }`}
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>{simulatedDeviation ? 'Reset Corridor' : 'Simulate Route Deviation (>500m)'}</span>
+              <span>
+                {simulatedDeviation
+                  ? 'Simulation Active: Simulated transit tracking (Click to Reset)'
+                  : 'Simulated transit tracking: Test Route Deviation (>500m)'}
+              </span>
             </button>
           </div>
 

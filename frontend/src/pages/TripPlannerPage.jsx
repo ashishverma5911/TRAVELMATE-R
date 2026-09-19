@@ -27,6 +27,7 @@ import {
   NEWS_CONFIG,
 } from '../services/newsService';
 import StatusBadge from '../components/common/StatusBadge';
+import { useJourneyChain } from '../context/JourneyChainContext';
 
 const LOCAL_STORAGE_KEY = 'tm_trip_planner_itinerary_v1';
 
@@ -63,6 +64,7 @@ const DEFAULT_ITINERARY = [
 ];
 
 export default function TripPlannerPage() {
+  const { activeJourney, addTimelineEvent } = useJourneyChain();
   const [itinerary, setItinerary] = useState(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -187,6 +189,13 @@ export default function TripPlannerPage() {
         ...formData,
       };
       setItinerary((prev) => [...prev, newPlan]);
+      const pInfo = getPlaceInfo(formData.placeKey);
+      addTimelineEvent({
+        title: `Itinerary Planned: ${pInfo?.name || 'Destination'}`,
+        module: 'Trip Planner',
+        description: `Scheduled for ${formData.date} (${formData.timeSlot}). Automated ASI closure verified.`,
+        actionPath: '/planner'
+      });
     }
     setIsModalOpen(false);
     setSelectedPlaceKey(formData.placeKey);
@@ -319,22 +328,25 @@ export default function TripPlannerPage() {
 
       {/* Header Banner */}
       <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-surface-border relative overflow-hidden space-y-4">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-emerald-500/10 via-teal-500/10 to-transparent blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-emerald-500/15 via-cyan-500/10 to-transparent blur-3xl pointer-events-none" />
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/25">
                 <CalendarDays className="w-5 h-5" />
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white font-display tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-display tracking-tight">
                 Delhi Trip Planner & Disruption Radar
               </h1>
-              <span className="px-2.5 py-1 text-[11px] font-bold bg-emerald-500/20 text-emerald-300 rounded-lg border border-emerald-500/30 uppercase tracking-wide">
+              <span className="px-3 py-1 text-[11px] font-bold bg-emerald-500/20 text-emerald-300 rounded-full border border-emerald-500/30 uppercase tracking-wider">
                 Day-by-Day Safety Intelligence
               </span>
+              <span className="px-3 py-1 text-[11px] font-mono font-bold bg-white/[0.06] text-slate-300 rounded-full border border-white/10">
+                Chain: {activeJourney.id}
+              </span>
             </div>
-            <p className="text-sm text-slate-400 max-w-2xl">
+            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
               Build your customized Delhi itinerary. Each scheduled day is continuously cross-referenced against official ASI closure schedules and recent civic news to give you automated visit recommendations.
             </p>
           </div>
@@ -344,13 +356,13 @@ export default function TripPlannerPage() {
             <button
               onClick={handleResetDefaults}
               title="Reset to default 4-day sample plan"
-              className="p-2.5 text-slate-400 hover:text-white bg-surface-card hover:bg-white/5 border border-surface-border rounded-xl transition-all"
+              className="p-2.5 text-slate-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-xl transition-all"
             >
               <RotateCcw className="w-4 h-4" />
             </button>
             <button
               onClick={handleOpenAdd}
-              className="inline-flex items-center space-x-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95"
+              className="inline-flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-600/25 transition-all hover:scale-105 active:scale-95"
             >
               <Plus className="w-4 h-4" />
               <span>Add Planned Day</span>
@@ -359,24 +371,24 @@ export default function TripPlannerPage() {
         </div>
 
         {/* Quick Summary Stats Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
-          <div className="bg-surface-card p-3 rounded-2xl border border-surface-border">
-            <div className="text-[10px] uppercase font-bold text-slate-400">Total Planned Days</div>
-            <div className="text-xl font-black text-white mt-0.5">{totalDays} Days</div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 relative z-10">
+          <div className="glass-card p-4 rounded-2xl border border-surface-border">
+            <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Total Planned Days</div>
+            <div className="text-xl font-extrabold text-white mt-0.5">{totalDays} Days</div>
           </div>
-          <div className="bg-surface-card p-3 rounded-2xl border border-surface-border">
-            <div className="text-[10px] uppercase font-bold text-emerald-400 flex items-center space-x-1">
-              <CheckCircle2 className="w-3 h-3" />
+          <div className="glass-card p-4 rounded-2xl border border-surface-border">
+            <div className="text-[10px] uppercase font-bold tracking-wider text-emerald-400 flex items-center space-x-1">
+              <CheckCircle2 className="w-3.5 h-3.5" />
               <span>Recommended Slots</span>
             </div>
-            <div className="text-xl font-black text-emerald-400 mt-0.5">{goodCount} Verified Good</div>
+            <div className="text-xl font-extrabold text-emerald-400 mt-0.5">{goodCount} Verified Good</div>
           </div>
-          <div className="bg-surface-card p-3 rounded-2xl border border-surface-border col-span-2 sm:col-span-1">
-            <div className="text-[10px] uppercase font-bold text-rose-400 flex items-center space-x-1">
-              <AlertTriangle className="w-3 h-3" />
+          <div className="glass-card p-4 rounded-2xl border border-surface-border col-span-2 sm:col-span-1">
+            <div className="text-[10px] uppercase font-bold tracking-wider text-rose-400 flex items-center space-x-1">
+              <AlertTriangle className="w-3.5 h-3.5" />
               <span>Advisories / Closures</span>
             </div>
-            <div className="text-xl font-black text-rose-400 mt-0.5">{rescheduleCount} Alert{rescheduleCount === 1 ? '' : 's'}</div>
+            <div className="text-xl font-extrabold text-rose-400 mt-0.5">{rescheduleCount} Alert{rescheduleCount === 1 ? '' : 's'}</div>
           </div>
         </div>
       </div>
@@ -439,14 +451,14 @@ export default function TripPlannerPage() {
                     onClick={() => setSelectedPlaceKey(plan.placeKey)}
                     className={`glass-card p-5 rounded-2xl border transition-all cursor-pointer space-y-3 relative group ${
                       isSelected
-                        ? 'border-emerald-500 shadow-xl shadow-emerald-500/10 bg-surface'
-                        : 'border-surface-border hover:border-emerald-500/40'
+                        ? 'border-emerald-500/60 shadow-xl shadow-emerald-500/10 bg-white/[0.05]'
+                        : 'border-white/[0.08] hover:border-emerald-500/40 hover:bg-white/[0.04]'
                     }`}
                   >
                     {/* Top Row: Day Number, Date, Time Slot, and Edit/Delete */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center space-x-2">
-                        <span className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-white">
+                        <span className="w-8 h-8 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-xs font-bold text-white font-mono">
                           D{index + 1}
                         </span>
                         <div>
@@ -471,14 +483,14 @@ export default function TripPlannerPage() {
                         <button
                           onClick={() => handleOpenEdit(plan)}
                           title="Edit this day"
-                          className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
+                          className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => handleDeletePlan(plan.id)}
                           title="Delete this day"
-                          className="p-1.5 text-slate-400 hover:text-rose-400 rounded-lg hover:bg-rose-500/10 transition-colors"
+                          className="p-1.5 text-slate-400 hover:text-rose-400 rounded-lg hover:bg-rose-500/15 transition-colors"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -487,7 +499,7 @@ export default function TripPlannerPage() {
 
                     {/* AUTOMATED RECOMMENDATION BADGE & ONE-LINE REASON */}
                     <div
-                      className={`p-3 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 ${evalResult.badgeClass}`}
+                      className={`p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 ${evalResult.badgeClass}`}
                     >
                       <div className="flex items-center space-x-2">
                         {evalResult.status === 'reschedule' ? (
@@ -508,7 +520,7 @@ export default function TripPlannerPage() {
 
                     {/* Notes & Activity Description */}
                     {plan.notes && (
-                      <p className="text-xs text-slate-300 bg-white/5 p-3 rounded-xl border border-white/5">
+                      <p className="text-xs text-slate-300 bg-white/[0.03] p-3 rounded-xl border border-white/[0.06]">
                         <strong className="text-slate-400 font-semibold">Notes:</strong> {plan.notes}
                       </p>
                     )}
@@ -516,7 +528,7 @@ export default function TripPlannerPage() {
                     {/* Bottom destination meta bar */}
                     <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
                       <span className="flex items-center space-x-1">
-                        <MapPin className="w-3 h-3 text-slate-500" />
+                        <MapPin className="w-3.5 h-3.5 text-slate-500" />
                         <span>{place.category}</span>
                       </span>
                       <span className="text-emerald-400 font-semibold flex items-center space-x-1">
@@ -543,14 +555,14 @@ export default function TripPlannerPage() {
             <StatusBadge status="Official" />
           </div>
 
-          <div className="glass-panel p-6 rounded-3xl border border-surface-border space-y-6">
+          <div className="glass-card p-6 rounded-3xl border border-surface-border space-y-6">
             {/* Active Destination Headline */}
             <div className="flex items-start justify-between gap-3 pb-4 border-b border-white/10">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">
                   Target Destination
                 </span>
-                <h3 className="text-xl font-black text-white font-display mt-0.5">
+                <h3 className="text-xl font-extrabold text-white font-display mt-0.5">
                   {activePlaceObj.name}
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
@@ -566,7 +578,7 @@ export default function TripPlannerPage() {
                 <select
                   value={selectedPlaceKey}
                   onChange={(e) => setSelectedPlaceKey(e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-surface-card border border-surface-border rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-2.5 py-1.5 bg-white/[0.04] border border-white/15 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
                 >
                   {seedPlaces.map((p) => (
                     <option key={p.place_key} value={p.place_key}>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calculator, AlertTriangle, CheckCircle, Navigation, Info, MessageSquare, Volume2, ShieldCheck, Crosshair, MapPin, Moon, Sun, ExternalLink } from 'lucide-react';
 import { api } from '../services/api';
 import { useTraveler } from '../context/TravelerContext';
+import { useJourneyChain } from '../context/JourneyChainContext';
 import StatusBadge from '../components/common/StatusBadge';
 import LanguageSupportModal from '../components/common/LanguageSupportModal';
 import GoogleMapView from '../components/maps/GoogleMapView';
@@ -28,6 +29,8 @@ const DELHI_LANDMARK_COORDS = {
 
 export default function FareMeterPage() {
   const { journey } = useTraveler();
+  const { activeJourney, recordFareCheck } = useJourneyChain();
+  const [savedToChain, setSavedToChain] = useState(false);
 
   const [origin, setOrigin] = useState('New Delhi Railway Station (NDLS)');
   const [destination, setDestination] = useState('Red Fort (Lal Qila)');
@@ -194,19 +197,19 @@ export default function FareMeterPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8 animate-in fade-in duration-300">
       {/* Page Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
         <div>
-          <div className="inline-flex items-center space-x-2 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-1">
-            <Calculator className="w-4 h-4" />
-            <span>Delhi Transport Department Reference Model</span>
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-2">
+            <Calculator className="w-3.5 h-3.5 text-amber-400" />
+            <span>Transport Fare Calculator • Delhi Gazette Tariff</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white">
-            Fair Fare Meter & Discrepancy Advisor
+          <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
+            Check Transport Fare
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Verify quoted auto/cab fares against official Delhi Government gazette rates before paying.
+          <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+            See an estimated price before you travel. Fares are reference benchmarks based on official Delhi Government meter rules, not absolute guarantees.
           </p>
         </div>
 
@@ -214,7 +217,7 @@ export default function FareMeterPage() {
         <button
           id="btn-hero-fare-preset"
           onClick={loadHeroPreset}
-          className="px-4 py-2 bg-gradient-to-r from-amber-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 border border-amber-500/40 text-amber-300 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all shrink-0"
+          className="px-4 py-2.5 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-orange-600/30 border border-amber-500/40 text-amber-300 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all shrink-0 shadow-lg shadow-amber-500/10"
         >
           <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
           <span>Load "NDLS → Red Fort" Hero Demo</span>
@@ -222,7 +225,7 @@ export default function FareMeterPage() {
       </div>
 
       {/* 1 & 2: LIVE TRANSIT MAP (PROPORTIONAL SIZE: 300-320px, POSITIONED DIRECTLY ABOVE ROUTE & FARE DETAILS) */}
-      <div className="mb-8 glass-card p-4 sm:p-5 rounded-3xl">
+      <div className="glass-card p-5 sm:p-6 rounded-3xl border border-surface-border">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
           <div>
             <div className="inline-flex items-center space-x-2 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-0.5">
@@ -492,12 +495,33 @@ export default function FareMeterPage() {
               </div>
 
               {/* Big Fare Display */}
-              <div className="p-6 rounded-2xl bg-surface border border-surface-border text-center">
+              <div className="p-6 rounded-2xl bg-surface border border-surface-border text-center space-y-3">
                 <span className="text-xs text-slate-400 block mb-1">Official Benchmark</span>
                 <div className="text-3xl sm:text-4xl font-extrabold font-mono text-emerald-400">
                   {fareResult.breakdown.expected_range}
                 </div>
                 <p className="text-xs text-slate-400 mt-2">{fareResult.breakdown.reference_rate}</p>
+
+                <div className="pt-3 border-t border-white/10 flex items-center justify-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      recordFareCheck({
+                        from: origin,
+                        to: destination,
+                        distance: distanceKm,
+                        fare: fareResult.breakdown.calculated_fare || 120,
+                        mode: vehicleType === 'auto' ? 'Auto-Rickshaw' : 'AC Taxi'
+                      });
+                      setSavedToChain(true);
+                      setTimeout(() => setSavedToChain(false), 3000);
+                    }}
+                    className="px-4 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center space-x-1.5 transition-all"
+                  >
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    <span>{savedToChain ? `✓ Saved to Chain (${activeJourney.id})` : `Save to Journey Chain (${activeJourney.id})`}</span>
+                  </button>
+                </div>
               </div>
 
               {/* Overcharge Warning or Fair Tag (Strict Rule: NEVER AN ACCUSATION!) */}
@@ -562,16 +586,16 @@ export default function FareMeterPage() {
             </div>
           ) : (
             <div className="glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center h-full min-h-[350px]">
-              <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-slate-500 mb-4">
+              <div className="w-16 h-16 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-emerald-400 mb-4 shadow-inner">
                 <Calculator className="w-8 h-8" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Check Quoted Fare</h3>
-              <p className="text-xs text-slate-400 max-w-sm">
+              <h3 className="text-lg font-bold text-white mb-2 font-display">Check Quoted Fare</h3>
+              <p className="text-xs text-slate-400 max-w-sm leading-relaxed">
                 Enter your destination and any quoted price to evaluate whether it's fair or trigger our non-accusatory advice banner.
               </p>
               <button
                 onClick={loadHeroPreset}
-                className="mt-6 px-4 py-2 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 rounded-xl text-xs font-bold"
+                className="mt-6 px-4 py-2.5 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-500/10"
               >
                 Try "NDLS → Red Fort" Hero Demo →
               </button>

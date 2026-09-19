@@ -4,6 +4,12 @@ import { api, API_BASE } from '../services/api';
 import StatusBadge from '../components/common/StatusBadge';
 
 export default function AdminDashboardPage() {
+  const [isAuthorized, setIsAuthorized] = useState(() => {
+    return sessionStorage.getItem('tm_admin_auth') === 'true';
+  });
+  const [passcode, setPasscode] = useState('');
+  const [authError, setAuthError] = useState('');
+
   const [stats, setStats] = useState({
     totalJourneys: 24,
     activeJourneys: 8,
@@ -76,6 +82,73 @@ export default function AdminDashboardPage() {
     }
   };
 
+  if (!isAuthorized) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-16 text-center animate-in fade-in duration-300">
+        <div className="glass-card p-8 rounded-3xl border border-surface-border space-y-6">
+          <div className="w-16 h-16 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mx-auto">
+            <Shield className="w-8 h-8" />
+          </div>
+          <div>
+            <span className="text-[11px] uppercase font-bold text-indigo-400 tracking-wider">Internal Staff Portal</span>
+            <h2 className="text-xl font-bold font-display text-white mt-1">Admin & Trust Escrow Portal</h2>
+            <p className="text-xs text-slate-400 mt-2">
+              This area is restricted to Delhi Tourist Police officers and Ministry moderation staff.
+            </p>
+          </div>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (passcode.trim() === '1122' || passcode.trim() === 'admin') {
+                sessionStorage.setItem('tm_admin_auth', 'true');
+                setIsAuthorized(true);
+              } else {
+                setAuthError('Invalid passcode. Use "1122" or click demo quick unlock.');
+              }
+            }}
+            className="space-y-3 text-left"
+          >
+            <div>
+              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider block mb-1">Staff PIN / Passcode</label>
+              <input
+                type="password"
+                value={passcode}
+                onChange={(e) => {
+                  setPasscode(e.target.value);
+                  setAuthError('');
+                }}
+                placeholder="Enter 4-digit PIN (1122)"
+                className="w-full px-4 py-2.5 bg-surface border border-surface-border rounded-xl text-white text-sm focus:outline-none focus:border-indigo-500 text-center tracking-widest font-mono"
+              />
+              {authError && <p className="text-[11px] text-rose-400 mt-1 text-center font-medium">{authError}</p>}
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition-all shadow-lg shadow-indigo-600/30"
+            >
+              Verify Credentials & Unlock
+            </button>
+          </form>
+
+          <div className="pt-2 border-t border-white/10">
+            <button
+              type="button"
+              onClick={() => {
+                sessionStorage.setItem('tm_admin_auth', 'true');
+                setIsAuthorized(true);
+              }}
+              className="text-xs text-slate-400 hover:text-indigo-300 font-semibold underline transition-colors"
+            >
+              Staff Demo Quick Access (One-Click)
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       {/* Dashboard Top Header */}
@@ -93,13 +166,24 @@ export default function AdminDashboardPage() {
           </p>
         </div>
 
-        <button
-          onClick={loadAdminData}
-          className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          <span>Refresh Live Queue</span>
-        </button>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={loadAdminData}
+            className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>Refresh Live Queue</span>
+          </button>
+          <button
+            onClick={() => {
+              sessionStorage.removeItem('tm_admin_auth');
+              setIsAuthorized(false);
+            }}
+            className="px-3.5 py-2 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-300 rounded-xl text-xs font-bold transition-all"
+          >
+            Lock Session
+          </button>
+        </div>
       </div>
 
       {/* Overview Stat Cards */}
@@ -194,8 +278,8 @@ export default function AdminDashboardPage() {
                 </div>
 
                 <div className="p-3.5 bg-surface rounded-2xl border border-surface-border space-y-1.5">
-                  <span className="text-[10px] uppercase font-bold text-indigo-400 block mb-1">
-                    Claude Extracted Schema
+                  <span className="text-[10px] uppercase font-bold text-emerald-400 block mb-1">
+                    Gemini AI Extracted Schema
                   </span>
                   <div><strong>Location:</strong> {inc.structured_data?.location}</div>
                   <div><strong>Parties:</strong> {inc.structured_data?.person_type_involved}</div>

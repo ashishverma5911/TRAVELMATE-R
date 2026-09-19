@@ -87,7 +87,7 @@ export default function LanguageSupportModal({ isOpen, onClose }) {
 
   const handleOpenFullPage = () => {
     onClose();
-    navigate('/phrase-helper');
+    navigate('/bhashini-translator');
   };
 
   // Filter phrases
@@ -347,7 +347,7 @@ export default function LanguageSupportModal({ isOpen, onClose }) {
             onClick={handleOpenFullPage}
             className="text-emerald-400 hover:underline font-semibold flex items-center space-x-1"
           >
-            <span>Open Dedicated Phrase Helper</span>
+            <span>Open Dedicated Bhashini Translator</span>
             <ExternalLink className="w-3 h-3" />
           </button>
         </div>

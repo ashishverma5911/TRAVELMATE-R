@@ -69,7 +69,7 @@ exports.getEvidenceByJourney = async (req, res, next) => {
   }
 };
 
-// 3. Submit Incident Report (Pre-structured or raw for Claude parsing)
+// 3. Submit Incident Report (Pre-structured or raw for Gemini AI parsing)
 exports.submitIncident = async (req, res, next) => {
   try {
     const {

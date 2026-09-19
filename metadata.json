@@ -1,0 +1,12 @@
+{
+  "name": "TravelMate Delhi",
+  "description": "Cross-service tourist trust and safety layer for foreign tourists visiting Delhi. One tourist, one temporary Journey ID, verified places, fair fare check, and safe journey tracking.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
