@@ -22,7 +22,8 @@ import {
   ChevronRight,
   Sparkles,
   Info,
-  LogOut
+  LogOut,
+  Download
 } from 'lucide-react';
 import { useTraveler } from '../context/TravelerContext';
 import { useJourneyChain } from '../context/JourneyChainContext';
@@ -116,6 +117,16 @@ export default function UserPortalPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
+            <a
+              href="/travelmate-source.zip"
+              download="travelmate-source.zip"
+              id="btn-user-portal-download-zip"
+              className="px-4 py-2.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-indigo-200 hover:text-white text-xs font-bold flex items-center space-x-2 transition-all shadow-md group"
+              title="Download Full Project Source Code as a ZIP file"
+            >
+              <Download className="w-4 h-4 text-indigo-400 group-hover:-translate-y-0.5 transition-transform" />
+              <span>Download Project ZIP</span>
+            </a>
             <button
               onClick={() => setIsQRModalOpen(true)}
               id="btn-user-portal-qr"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, QrCode, Globe, AlertTriangle, Sun, Moon, User, Compass } from 'lucide-react';
+import { Shield, QrCode, Globe, AlertTriangle, Sun, Moon, User, Compass, Download } from 'lucide-react';
 import { useTraveler } from '../../context/TravelerContext';
 import { useJourneyChain } from '../../context/JourneyChainContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -97,6 +97,18 @@ export default function Header({ onOpenQR, onOpenLang }) {
             <AlertTriangle className="w-3.5 h-3.5 text-red-400 animate-bounce" />
             <span>112 SOS</span>
           </Link>
+
+          {/* Direct Download ZIP Button */}
+          <a
+            href="/travelmate-source.zip"
+            download="travelmate-source.zip"
+            id="btn-header-download-zip"
+            title="Download Complete Project Source Code (.ZIP)"
+            className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 hover:border-emerald-400 text-emerald-300 text-xs font-semibold transition-all shadow-sm group"
+          >
+            <Download className="w-3.5 h-3.5 text-emerald-400 group-hover:-translate-y-0.5 transition-transform" />
+            <span>Download ZIP</span>
+          </a>
 
           {/* User Portal Avatar (Replaces Admin Portal in Main Nav) */}
           <Link

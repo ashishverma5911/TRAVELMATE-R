@@ -63,6 +63,19 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Download Source Code Zip Archive
+app.get('/api/download-zip', (req, res) => {
+  const zipPath = path.join(__dirname, '../../frontend/public/travelmate-source.zip');
+  res.download(zipPath, 'travelmate-project-source.zip', (err) => {
+    if (err) {
+      console.error('Error serving zip download:', err);
+      if (!res.headersSent) {
+        res.status(500).json({ error: 'Zip file could not be downloaded' });
+      }
+    }
+  });
+});
+
 // Safety Zones API (NCRB + Delhi Police risk overlay)
 app.get('/api/zones', (req, res) => {
   res.json({
